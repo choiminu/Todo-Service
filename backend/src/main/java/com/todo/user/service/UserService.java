@@ -10,6 +10,7 @@ import com.todo.user.dto.SignupRequest;
 import com.todo.user.exception.UserException;
 import com.todo.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,14 +19,16 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public Long signup(SignupRequest req) {
         validateDuplicateEmail(req.getEmail());
         validatePasswordMatch(req.getPassword(), req.getConfirmPassword());
 
         User user = userMapper.signupRequestToEntity(req);
-        userRepository.save(user);
+        user.changePassword(passwordEncoder.encode(req.getPassword()));
 
+        userRepository.save(user);
         return user.getId();
     }
 

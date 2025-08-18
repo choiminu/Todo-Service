@@ -4,6 +4,7 @@ import static com.todo.common.exception.ErrorCode.EMAIL_NOT_UNIQUE;
 import static com.todo.common.exception.ErrorCode.PASSWORD_MISMATCH;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.todo.common.exception.ErrorCode;
@@ -17,9 +18,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -29,6 +32,9 @@ class UserServiceTest {
 
     @Mock
     UserMapper userMapper;
+
+    @Mock
+    PasswordEncoder passwordEncoder;
 
     @InjectMocks
     UserService userService;
@@ -65,6 +71,27 @@ class UserServiceTest {
 
         //then
         Assertions.assertThat(userId).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("회원가입시 패스워드는 암호화되어 저장된다.")
+    void 패스워드_암호화() {
+        //given
+        SignupRequest req = new SignupRequest(email, password, confirmPassword);
+
+        when(userMapper.signupRequestToEntity(any())).thenReturn(user);
+        when(passwordEncoder.encode(password)).thenReturn("encodedPassword");
+
+        //when
+        userService.signup(req);
+
+        //then
+        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(captor.capture());
+
+        User savedUser = captor.getValue();
+        Assertions.assertThat(savedUser.getPassword()).isEqualTo("encodedPassword");
+
     }
 
     @Test
