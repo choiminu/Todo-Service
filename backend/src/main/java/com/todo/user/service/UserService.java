@@ -15,8 +15,17 @@ public class UserService {
     private final UserMapper userMapper;
 
     public Long signup(SignupRequest request) {
+        validateDuplicateEmail(request.getEmail());
         User user = userMapper.signupRequestToEntity(request);
         userRepository.save(user);
         return user.getId();
     }
+
+    private void validateDuplicateEmail(String email) {
+        if(userRepository.existsByEmail(email)) {
+            throw new RuntimeException("이미 사용중인 이메일입니다.");
+        }
+    }
+
+
 }

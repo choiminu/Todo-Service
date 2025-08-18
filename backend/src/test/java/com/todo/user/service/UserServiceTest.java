@@ -63,4 +63,18 @@ class UserServiceTest {
         Assertions.assertThat(userId).isEqualTo(1L);
     }
 
+    @Test
+    @DisplayName("이미 가입된 이메일로 회원가입을 하는 경우 예외가 발생한다.")
+    void 회원가입_실패_이메일_중복() {
+        //given
+        SignupRequest req = new SignupRequest(email, password, confirmPassword);
+
+        when(userRepository.existsByEmail(email)).thenReturn(true);
+
+        //when & then
+        Assertions.assertThatThrownBy(() -> userService.signup(req))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("이미 사용중인 이메일입니다.");
+    }
+
 }
