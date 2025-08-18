@@ -1,12 +1,15 @@
 package com.todo.user.service;
 
+import static com.todo.common.exception.ErrorCode.EMAIL_NOT_UNIQUE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
 import com.todo.user.domain.repository.UserRepository;
 import com.todo.user.dto.SignupRequest;
+import com.todo.user.exception.UserException;
 import com.todo.user.mapper.UserMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,8 +76,8 @@ class UserServiceTest {
 
         //when & then
         Assertions.assertThatThrownBy(() -> userService.signup(req))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("이미 사용중인 이메일입니다.");
+                .isInstanceOf(UserException.class)
+                .hasMessage(EMAIL_NOT_UNIQUE.getMessage());
     }
 
 }

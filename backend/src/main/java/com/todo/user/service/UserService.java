@@ -1,8 +1,12 @@
 package com.todo.user.service;
 
+import static com.todo.common.exception.ErrorCode.EMAIL_NOT_UNIQUE;
+
+import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
 import com.todo.user.domain.repository.UserRepository;
 import com.todo.user.dto.SignupRequest;
+import com.todo.user.exception.UserException;
 import com.todo.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +27,7 @@ public class UserService {
 
     private void validateDuplicateEmail(String email) {
         if(userRepository.existsByEmail(email)) {
-            throw new RuntimeException("이미 사용중인 이메일입니다.");
+            throw new UserException(EMAIL_NOT_UNIQUE);
         }
     }
 
