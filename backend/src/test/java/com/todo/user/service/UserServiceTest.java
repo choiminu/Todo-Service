@@ -1,6 +1,7 @@
 package com.todo.user.service;
 
 import static com.todo.common.exception.ErrorCode.EMAIL_NOT_UNIQUE;
+import static com.todo.common.exception.ErrorCode.PASSWORD_MISMATCH;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -78,6 +79,18 @@ class UserServiceTest {
         Assertions.assertThatThrownBy(() -> userService.signup(req))
                 .isInstanceOf(UserException.class)
                 .hasMessage(EMAIL_NOT_UNIQUE.getMessage());
+    }
+
+    @Test
+    @DisplayName("회원가입 과정에서 패스워드와 패스워드 확인 값이 다르면 예외가 발생한다.")
+    void 회원가입_실패_패스워드_불일치() {
+        //given
+        SignupRequest req = new SignupRequest(email, password, "wrongPassword");
+
+        //when & then
+        Assertions.assertThatThrownBy(() -> userService.signup(req))
+                .isInstanceOf(UserException.class)
+                .hasMessage(PASSWORD_MISMATCH.getMessage());
     }
 
 }

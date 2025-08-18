@@ -11,7 +11,8 @@ public enum ErrorCode {
     /**
      * 사용자 관련 에러
      */
-    EMAIL_NOT_UNIQUE(HttpStatus.BAD_REQUEST, "U01", "이미 사용중인 이메일입니다.")
+    EMAIL_NOT_UNIQUE(HttpStatus.BAD_REQUEST, "U01", "이미 사용중인 이메일입니다."),
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "U02", "비밀번호가 일치하지 않습니다.")
 
     ;
 
