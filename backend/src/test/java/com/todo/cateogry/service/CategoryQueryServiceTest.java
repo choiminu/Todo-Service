@@ -1,6 +1,8 @@
 package com.todo.cateogry.service;
 
+import static com.todo.cateogry.domain.QCategory.category;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.todo.cateogry.domain.Category;
@@ -10,6 +12,8 @@ import com.todo.cateogry.dto.CategoryResponse;
 import com.todo.cateogry.mapper.CategoryMapper;
 import com.todo.user.domain.User;
 import com.todo.user.service.UserDomainService;
+import java.util.ArrayList;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -63,6 +67,24 @@ class CategoryQueryServiceTest {
 
         //then
         Assertions.assertThat(res.getName()).isEqualTo(req.getName());
+    }
+
+    @Test
+    @DisplayName("사용자는 자신이 생성한 모든 카테고리를 조회할 수 있다.")
+    void 카테고리_조회_성공() {
+        //given
+        List<Category> categories = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            categories.add(Category.builder().id((long) i).name("title" + i).user(user).build());
+        }
+        when(categoryMapper.EntityToCategoryResponse(any())).thenReturn(new CategoryResponse("WORK"));
+        when(categoryRepository.findCategoriesByUserId(1L)).thenReturn(categories);
+
+        //when
+        List<CategoryResponse> responses = categoryQueryService.findAll(user.getId());
+
+        //then
+        Assertions.assertThat(responses.size()).isEqualTo(10);
     }
 
 }

@@ -7,6 +7,8 @@ import com.todo.cateogry.dto.CategoryResponse;
 import com.todo.cateogry.mapper.CategoryMapper;
 import com.todo.user.domain.User;
 import com.todo.user.service.UserDomainService;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,4 +32,15 @@ public class CategoryQueryService {
         return categoryMapper.EntityToCategoryResponse(category);
     }
 
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> findAll(Long userId) {
+        List<Category> categories = categoryRepository.findCategoriesByUserId(userId);
+
+        List<CategoryResponse> res = new ArrayList<>();
+        for (Category category : categories) {
+            res.add(categoryMapper.EntityToCategoryResponse(category));
+        }
+
+        return res;
+    }
 }
