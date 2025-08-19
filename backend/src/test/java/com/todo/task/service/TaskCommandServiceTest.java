@@ -2,6 +2,7 @@ package com.todo.task.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.todo.cateogry.domain.Category;
@@ -11,6 +12,7 @@ import com.todo.task.dto.TaskResponse;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
+import com.todo.task.mapper.TaskMapper;
 import com.todo.user.domain.User;
 import com.todo.user.service.UserDomainService;
 import java.time.LocalDate;
@@ -31,6 +33,9 @@ class TaskCommandServiceTest {
 
     @Mock
     UserDomainService userDomainService;
+
+    @Mock
+    TaskMapper taskMapper;
 
     @Mock
     CategoryQueryService categoryQueryService;
@@ -64,9 +69,9 @@ class TaskCommandServiceTest {
     }
 
     @Test
-    @DisplayName("사용자는 자신의 카테고리에 Task를 생성할 수 있다.")
+    @DisplayName("사용자는 자신의 카테고리에 Task를 생성할 수 있다")
     void 할일_생성_성공() {
-        //given
+        // given
         TaskCreateRequest req = new TaskCreateRequest(
                 category.getId(),
                 "테스트 코드 작성하기",
@@ -87,19 +92,31 @@ class TaskCommandServiceTest {
                 .category(category)
                 .build();
 
-        when(categoryQueryService.findById(1L)).thenReturn(category);
-        when(taskRepository.save(any())).thenReturn(task);
+        TaskResponse resp = new TaskResponse(
+                task.getId(),
+                task.getTitle(),
+                task.getContent(),
+                task.getStatus(),
+                task.getStartDate(),
+                task.getEndDate()
+        );
 
-        //when
-        TaskResponse response = taskCommandService.createTask(user.getId(), req);
+        when(userDomainService.findUserById(user.getId())).thenReturn(user);
+        when(categoryQueryService.findById(category.getId())).thenReturn(category);
+        when(taskMapper.taskCreateRequestToEntity(req)).thenReturn(task);
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+        when(taskMapper.entityToTaskResponse(task)).thenReturn(resp);
 
-        //then
-        Assertions.assertThat(response.getTitle()).isEqualTo(req.getTitle());
-        Assertions.assertThat(response.getContent()).isEqualTo(req.getContent());
-        Assertions.assertThat(response.getCategoryId()).isEqualTo(req.getCategoryId());
-        Assertions.assertThat(response.getStartDate()).isEqualTo(req.getStartDate());
-        Assertions.assertThat(response.getEndDate()).isEqualTo(req.getEndDate());
-        Assertions.assertThat(response.getStatus()).isEqualTo(TaskStatus.NONE);
+        // when
+        TaskResponse result = taskCommandService.createTask(user.getId(), req);
+
+        // then
+        Assertions.assertThat(result.getTitle()).isEqualTo(req.getTitle());
+        Assertions.assertThat(result.getContent()).isEqualTo(req.getContent());
+        Assertions.assertThat(result.getCategoryId()).isEqualTo(req.getCategoryId());
+        Assertions.assertThat(result.getStartDate()).isEqualTo(req.getStartDate());
+        Assertions.assertThat(result.getEndDate()).isEqualTo(req.getEndDate());
+        Assertions.assertThat(result.getStatus()).isEqualTo(TaskStatus.NONE);
     }
 
 }

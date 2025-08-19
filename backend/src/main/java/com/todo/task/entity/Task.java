@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Builder
@@ -38,10 +39,12 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
