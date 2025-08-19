@@ -13,6 +13,7 @@ import com.todo.auth.dto.LoginRequest;
 import com.todo.auth.exception.AuthenticationException;
 import com.todo.auth.strategy.AuthStrategy;
 import com.todo.user.domain.User;
+import com.todo.user.domain.UserRole;
 import com.todo.user.exception.UserException;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +92,7 @@ class AuthServiceTest {
         //given
         LoginRequest request = new LoginRequest(email, password);
 
-        LoginUser stub = new LoginUser(1L);
+        LoginUser stub = new LoginUser(1L, UserRole.USER);
 
         when(passwordAuthStrategy.supports(LoginProvider.SERVER)).thenReturn(true);
         when(passwordAuthStrategy.authentication(any())).thenReturn(stub);

@@ -16,7 +16,8 @@ public enum ErrorCode {
     /**
      * 인가 관련 에러
      */
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "U01", "인증이 필요합니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "U01", "로그인이 필요한 서비스입니다."),
+    FORBIDDEN(HttpStatus.UNAUTHORIZED, "U02", "접근 권한이 부족합니다."),
 
     /**
      * 카테고리 관련 에러

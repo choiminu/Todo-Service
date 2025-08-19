@@ -6,6 +6,7 @@ import com.todo.auth.domain.LoginProvider;
 import com.todo.common.session.LoginUser;
 import com.todo.auth.dto.LoginRequest;
 import com.todo.user.domain.User;
+import com.todo.user.domain.UserRole;
 import com.todo.user.exception.UserException;
 import com.todo.user.service.UserDomainService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,6 @@ public class PasswordAuthStrategy implements AuthStrategy{
             throw new UserException(LOGIN_FAIL);
         }
 
-        return new LoginUser(findUser.getId());
+        return new LoginUser(findUser.getId(), UserRole.USER);
     }
 }
