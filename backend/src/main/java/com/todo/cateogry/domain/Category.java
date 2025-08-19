@@ -30,4 +30,16 @@ public class Category {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void validateOwner(Long userId) {
+        if (!this.user.getId().equals(userId)) {
+            throw new RuntimeException("잘못된");
+        }
+    }
+    public void update(String name) {
+        if (name != null) {
+            this.name = name;
+        }
+    }
+
+
 }

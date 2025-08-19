@@ -19,18 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryQueryService {
 
     private final CategoryRepository categoryRepository;
-    private final UserDomainService userDomainService;
     private final CategoryMapper categoryMapper;
-
-    public CategoryResponse create(Long userId, CategoryRequest request) {
-        User findUser = userDomainService.findUserById(userId);
-
-        Category category = categoryMapper.categoryRequestToEntity(request);
-        category.setUser(findUser);
-
-        categoryRepository.save(category);
-        return categoryMapper.EntityToCategoryResponse(category);
-    }
 
     @Transactional(readOnly = true)
     public List<CategoryResponse> findAll(Long userId) {
@@ -42,5 +31,11 @@ public class CategoryQueryService {
         }
 
         return res;
+    }
+
+    public Category findById(Long categoryId) {
+        return categoryRepository
+                .findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("ex"));
     }
 }
