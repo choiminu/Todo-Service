@@ -2,12 +2,10 @@ package com.todo.user.service;
 
 import static com.todo.common.exception.ErrorCode.EMAIL_NOT_UNIQUE;
 import static com.todo.common.exception.ErrorCode.PASSWORD_MISMATCH;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
 import com.todo.user.domain.repository.UserRepository;
 import com.todo.user.dto.SignupRequest;
@@ -25,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class UserQueryServiceTest {
 
     @Mock
     UserRepository userRepository;
@@ -37,7 +35,7 @@ class UserServiceTest {
     PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    UserService userService;
+    UserQueryService userQueryService;
 
     User user;
     String email;
@@ -67,7 +65,7 @@ class UserServiceTest {
         when(userMapper.signupRequestToEntity(any())).thenReturn(user);
 
         //when
-        Long userId = userService.signup(req);
+        Long userId = userQueryService.signup(req);
 
         //then
         Assertions.assertThat(userId).isEqualTo(1L);
@@ -83,7 +81,7 @@ class UserServiceTest {
         when(passwordEncoder.encode(password)).thenReturn("encodedPassword");
 
         //when
-        userService.signup(req);
+        userQueryService.signup(req);
 
         //then
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
@@ -103,7 +101,7 @@ class UserServiceTest {
         when(userRepository.existsByEmail(email)).thenReturn(true);
 
         //when & then
-        Assertions.assertThatThrownBy(() -> userService.signup(req))
+        Assertions.assertThatThrownBy(() -> userQueryService.signup(req))
                 .isInstanceOf(UserException.class)
                 .hasMessage(EMAIL_NOT_UNIQUE.getMessage());
     }
@@ -115,7 +113,7 @@ class UserServiceTest {
         SignupRequest req = new SignupRequest(email, password, "wrongPassword");
 
         //when & then
-        Assertions.assertThatThrownBy(() -> userService.signup(req))
+        Assertions.assertThatThrownBy(() -> userQueryService.signup(req))
                 .isInstanceOf(UserException.class)
                 .hasMessage(PASSWORD_MISMATCH.getMessage());
     }

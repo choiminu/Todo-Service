@@ -3,7 +3,6 @@ package com.todo.user.service;
 import static com.todo.common.exception.ErrorCode.EMAIL_NOT_UNIQUE;
 import static com.todo.common.exception.ErrorCode.PASSWORD_MISMATCH;
 
-import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
 import com.todo.user.domain.repository.UserRepository;
 import com.todo.user.dto.SignupRequest;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserQueryService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
