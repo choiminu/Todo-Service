@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.common.exception.ErrorCode;
+import com.todo.common.session.SessionManager;
 import com.todo.user.dto.SignupRequest;
 import com.todo.user.exception.UserException;
 import com.todo.user.service.UserQueryService;
@@ -33,6 +34,9 @@ class UserControllerTest {
 
     @MockitoBean
     UserQueryService userQueryService;
+
+    @MockitoBean
+    SessionManager sessionManager;
 
     String email;
     String password;

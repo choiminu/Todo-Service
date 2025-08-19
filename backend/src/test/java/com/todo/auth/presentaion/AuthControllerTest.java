@@ -13,6 +13,7 @@ import com.todo.common.session.LoginUser;
 import com.todo.auth.dto.LoginRequest;
 import com.todo.auth.service.AuthService;
 import com.todo.common.session.SessionManager;
+import com.todo.user.domain.UserRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -43,7 +44,7 @@ class AuthControllerTest {
         LoginRequest req = new LoginRequest("user@gmail.com", "rawPassword");
 
         doNothing().when(sessionManager).create(any(), any());
-        when(authService.login(null, req)).thenReturn(new LoginUser(1L));
+        when(authService.login(null, req)).thenReturn(new LoginUser(1L, UserRole.USER));
 
         //when & then
         mockMvc.perform(post("/api/auth/login")
