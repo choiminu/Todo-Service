@@ -35,4 +35,10 @@ public class CategoryCommandService {
         category.update(request.getName());
         return categoryMapper.EntityToCategoryResponse(category);
     }
+
+    public void delete(Long categoryId, Long userId) {
+        Category category = categoryQueryService.findById(categoryId);
+        category.validateOwner(userId);
+        categoryRepository.delete(category);
+    }
 }

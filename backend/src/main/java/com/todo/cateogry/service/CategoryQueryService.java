@@ -1,12 +1,12 @@
 package com.todo.cateogry.service;
 
+import static com.todo.common.exception.ErrorCode.CATEGORY_NOT_FOUND;
+
 import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.domain.repository.CategoryRepository;
-import com.todo.cateogry.dto.CategoryRequest;
 import com.todo.cateogry.dto.CategoryResponse;
+import com.todo.cateogry.exception.CategoryException;
 import com.todo.cateogry.mapper.CategoryMapper;
-import com.todo.user.domain.User;
-import com.todo.user.service.UserDomainService;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,14 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CategoryQueryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    @Transactional(readOnly = true)
     public List<CategoryResponse> findAll(Long userId) {
         List<Category> categories = categoryRepository.findCategoriesByUserId(userId);
 
@@ -35,7 +34,7 @@ public class CategoryQueryService {
 
     public Category findById(Long categoryId) {
         return categoryRepository
-                .findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("ex"));
+                .findCategoryById(categoryId)
+                .orElseThrow(() -> new CategoryException(CATEGORY_NOT_FOUND));
     }
 }

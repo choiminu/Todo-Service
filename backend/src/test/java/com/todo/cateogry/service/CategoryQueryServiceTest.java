@@ -48,28 +48,6 @@ class CategoryQueryServiceTest {
     }
 
     @Test
-    @DisplayName("사용자는 카테고리를 생성할 수 있다.")
-    void 카테고리_생성_성공() {
-        //given
-        Category category = Category.builder()
-                .id(1L)
-                .name("WORK")
-                .user(user)
-                .build();
-
-        CategoryRequest req = new CategoryRequest("WORK");
-
-        when(categoryMapper.categoryRequestToEntity(req)).thenReturn(category);
-        when(categoryMapper.EntityToCategoryResponse(category)).thenReturn(new CategoryResponse("WORK"));
-
-        //when
-        CategoryResponse res = categoryQueryService.create(user.getId(), req);
-
-        //then
-        Assertions.assertThat(res.getName()).isEqualTo(req.getName());
-    }
-
-    @Test
     @DisplayName("사용자는 자신이 생성한 모든 카테고리를 조회할 수 있다.")
     void 카테고리_조회_성공() {
         //given

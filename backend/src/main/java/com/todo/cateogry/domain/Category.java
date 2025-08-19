@@ -1,5 +1,9 @@
 package com.todo.cateogry.domain;
 
+import static com.todo.common.exception.ErrorCode.CATEGORY_UPDATE_FORBIDDEN;
+
+import com.todo.cateogry.exception.CategoryException;
+import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +36,7 @@ public class Category {
 
     public void validateOwner(Long userId) {
         if (!this.user.getId().equals(userId)) {
-            throw new RuntimeException("잘못된");
+            throw new CategoryException(CATEGORY_UPDATE_FORBIDDEN);
         }
     }
     public void update(String name) {
