@@ -9,6 +9,11 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     /**
+     * 인증 관련 에러
+     */
+    UNSUPPORTED_LOGIN_PROVIDER(HttpStatus.BAD_REQUEST, "A01", "지원하지 않는 로그인 제공자입니다."),
+
+    /**
      * 사용자 관련 에러
      */
     EMAIL_NOT_UNIQUE(HttpStatus.BAD_REQUEST, "U01", "이미 사용중인 이메일입니다."),
