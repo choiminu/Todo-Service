@@ -50,4 +50,10 @@ public class TaskCommandService {
         return taskMapper.entityToTaskResponse(findTask);
     }
 
+    public void deleteTask(Long userId, Long taskId) {
+        Task findTask = taskQueryService.findById(taskId);
+        findTask.validateOwner(userId);
+        taskRepository.delete(findTask);
+    }
+
 }

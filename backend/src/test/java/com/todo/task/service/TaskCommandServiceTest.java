@@ -112,7 +112,6 @@ class TaskCommandServiceTest {
         );
 
         when(userDomainService.findUserById(user.getId())).thenReturn(user);
-        when(categoryQueryService.findById(category.getId())).thenReturn(category);
         when(taskMapper.taskCreateRequestToEntity(req)).thenReturn(task);
         when(taskRepository.save(any(Task.class))).thenReturn(task);
         when(taskMapper.entityToTaskResponse(task)).thenReturn(resp);
@@ -229,6 +228,56 @@ class TaskCommandServiceTest {
         assertThatThrownBy(() -> taskCommandService.updateTask(user.getId(), req))
                 .isInstanceOf(TaskException.class)
                         .hasMessage(ErrorCode.TASK_ACCESS_FORBIDDEN.getMessage());
+    }
+
+    @Test
+    @DisplayName("사용자는 자신의 Task를 삭제할 수 있다.")
+    void 할일_삭제_성공() {
+        //given
+        Task task = Task.builder()
+                .id(1L)
+                .title("Todo 작성")
+                .content("HELLO WORLD")
+                .status(TaskStatus.NONE)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .user(user)
+                .category(category)
+                .build();
+
+        when(taskQueryService.findById(1L)).thenReturn(task);
+
+        //when
+        taskCommandService.deleteTask(user.getId(), 1L);
+
+        //then
+        verify(taskRepository).delete(task);
+    }
+
+    @Test
+    @DisplayName("다른 사용자의 Task를 삭제할 경우 예외가 발생한다.")
+    void 할일_삭제_실패() {
+        //given
+        User anotherUser = User.builder()
+                .id(2L)
+                .build();
+
+        Task task = Task.builder()
+                .id(1L)
+                .title("Todo 작성")
+                .content("HELLO WORLD")
+                .status(TaskStatus.NONE)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .user(anotherUser)
+                .category(category)
+                .build();
+
+        when(taskQueryService.findById(1L)).thenReturn(task);
+
+        //when
+        assertThatThrownBy(() -> taskCommandService.deleteTask(user.getId(), 1L))
+                .isInstanceOf(TaskException.class);
     }
 
 }
