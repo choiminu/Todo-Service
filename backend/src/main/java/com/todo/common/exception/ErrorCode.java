@@ -25,8 +25,11 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "C01", "카테고리를 찾을 수 없습니다."),
     CATEGORY_UPDATE_FORBIDDEN(HttpStatus.BAD_REQUEST, "C02", "본인의 카테고리만 수정할 수 있습니다."),
 
-
-
+    /**
+     * Task 관련 에러
+     */
+    TASK_NOT_FOUND(HttpStatus.BAD_REQUEST, "T01", "해당 Task를 찾을 수 없습니다."),
+    TASK_ACCESS_FORBIDDEN(HttpStatus.BAD_REQUEST, "T02", "해당 Task의 접근 권한이 없습니다."),
 
 
     /**

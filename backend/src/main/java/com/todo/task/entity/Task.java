@@ -1,6 +1,9 @@
 package com.todo.task.entity;
 
+import static com.todo.common.exception.ErrorCode.TASK_ACCESS_FORBIDDEN;
+
 import com.todo.cateogry.domain.Category;
+import com.todo.task.exception.TaskException;
 import com.todo.user.domain.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,4 +51,32 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void validateOwner(Long userId) {
+        if (!(this.user.getId().equals(userId))) {
+            throw new TaskException(TASK_ACCESS_FORBIDDEN);
+        }
+    }
+
+    public void taskUpdate(String title, String content, LocalDate startDate, LocalDate endDate, String status) {
+        if (title != null) {
+            this.title = title;
+        }
+
+        if (content != null) {
+            this.content = content;
+        }
+
+        if (startDate != null) {
+            this.startDate = startDate;
+        }
+
+        if (endDate != null) {
+            this.endDate = endDate;
+        }
+
+        if (status != null) {
+            this.status = TaskStatus.from(status);
+        }
+    }
 }

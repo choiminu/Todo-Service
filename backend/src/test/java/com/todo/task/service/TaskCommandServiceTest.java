@@ -1,6 +1,8 @@
 package com.todo.task.service;
 
 import static com.todo.common.exception.ErrorCode.CATEGORY_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -12,9 +14,11 @@ import com.todo.cateogry.service.CategoryQueryService;
 import com.todo.common.exception.ErrorCode;
 import com.todo.task.dto.TaskCreateRequest;
 import com.todo.task.dto.TaskResponse;
+import com.todo.task.dto.TaskUpdateRequest;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
+import com.todo.task.exception.TaskException;
 import com.todo.task.mapper.TaskMapper;
 import com.todo.user.domain.User;
 import com.todo.user.service.UserDomainService;
@@ -42,6 +46,9 @@ class TaskCommandServiceTest {
 
     @Mock
     CategoryQueryService categoryQueryService;
+
+    @Mock
+    TaskQueryService taskQueryService;
 
     @InjectMocks
     TaskCommandService taskCommandService;
@@ -114,12 +121,12 @@ class TaskCommandServiceTest {
         TaskResponse result = taskCommandService.createTask(user.getId(), req);
 
         // then
-        Assertions.assertThat(result.getTitle()).isEqualTo(req.getTitle());
-        Assertions.assertThat(result.getContent()).isEqualTo(req.getContent());
-        Assertions.assertThat(result.getCategoryId()).isEqualTo(req.getCategoryId());
-        Assertions.assertThat(result.getStartDate()).isEqualTo(req.getStartDate());
-        Assertions.assertThat(result.getEndDate()).isEqualTo(req.getEndDate());
-        Assertions.assertThat(result.getStatus()).isEqualTo(TaskStatus.NONE);
+        assertThat(result.getTitle()).isEqualTo(req.getTitle());
+        assertThat(result.getContent()).isEqualTo(req.getContent());
+        assertThat(result.getCategoryId()).isEqualTo(req.getCategoryId());
+        assertThat(result.getStartDate()).isEqualTo(req.getStartDate());
+        assertThat(result.getEndDate()).isEqualTo(req.getEndDate());
+        assertThat(result.getStatus()).isEqualTo(TaskStatus.NONE);
     }
 
     @Test
@@ -141,7 +148,87 @@ class TaskCommandServiceTest {
         Assertions.assertThatThrownBy(() -> taskCommandService.createTask(user.getId(), req))
                 .isInstanceOf(CategoryException.class)
                 .hasMessage(CATEGORY_NOT_FOUND.getMessage());
+    }
 
+    @Test
+    @DisplayName("사용자는 자신의 Task의 정보를 수정할 수 있다.")
+    void 할일_수정_성공() {
+        //given
+        Task task = Task.builder()
+                .id(1L)
+                .title("Todo 작성")
+                .content("HELLO WORLD")
+                .status(TaskStatus.NONE)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .user(user)
+                .category(category)
+                .build();
+
+        TaskUpdateRequest req = new TaskUpdateRequest(
+                1L,
+                "Todo 수정",
+                "hello world",
+                "PROGRESS",
+                LocalDate.now(),
+                LocalDate.now()
+                );
+
+        TaskResponse resp = new TaskResponse(
+                task.getId(),
+                req.getTitle(),
+                req.getContent(),
+                TaskStatus.PROGRESS,
+                req.getStartDate(),
+                req.getEndDate()
+        );
+
+        when(taskQueryService.findById(1L)).thenReturn(task);
+        when(taskMapper.entityToTaskResponse(task)).thenReturn(resp);
+
+        //when
+        TaskResponse response = taskCommandService.updateTask(user.getId(), req);
+
+        //then
+        assertThat(response.getTitle()).isEqualTo(req.getTitle());
+    }
+
+    @Test
+    @DisplayName("자신의 소유가 아닌 Task를 수정할 경우 예외가 발생한다.")
+    void 할일_수정_실패() {
+        //given
+        User anotherUser = User.builder()
+                .id(2L)
+                .build();
+
+
+        Task task = Task.builder()
+                .id(1L)
+                .title("Todo 작성")
+                .content("HELLO WORLD")
+                .status(TaskStatus.NONE)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .user(anotherUser)
+                .category(category)
+                .build();
+
+
+        TaskUpdateRequest req = new TaskUpdateRequest(
+                1L,
+                "Todo 수정",
+                "hello world",
+                "PROGRESS",
+                LocalDate.now(),
+                LocalDate.now()
+        );
+
+        when(taskQueryService.findById(any())).thenReturn(task);
+
+        //when & then
+        assertThatThrownBy(() -> taskCommandService.updateTask(user.getId(), req))
+                .isInstanceOf(TaskException.class)
+                        .hasMessage(ErrorCode.TASK_ACCESS_FORBIDDEN.getMessage());
     }
 
 }

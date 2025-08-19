@@ -4,8 +4,8 @@ import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.service.CategoryQueryService;
 import com.todo.task.dto.TaskCreateRequest;
 import com.todo.task.dto.TaskResponse;
+import com.todo.task.dto.TaskUpdateRequest;
 import com.todo.task.entity.Task;
-import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.mapper.TaskMapper;
 import com.todo.user.domain.User;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class TaskCommandService {
 
     private final TaskRepository taskRepository;
+    private final TaskQueryService taskQueryService;
     private final UserDomainService userDomainService;
     private final CategoryQueryService categoryQueryService;
     private final TaskMapper taskMapper;
@@ -32,6 +33,21 @@ public class TaskCommandService {
 
         taskRepository.save(task);
         return taskMapper.entityToTaskResponse(task);
+    }
+
+    public TaskResponse updateTask(Long userId, TaskUpdateRequest request) {
+        Task findTask = taskQueryService.findById(request.getTaskId());
+        findTask.validateOwner(userId);
+
+        findTask.taskUpdate(
+                request.getTitle(),
+                request.getContent(),
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getStatus()
+        );
+
+        return taskMapper.entityToTaskResponse(findTask);
     }
 
 }
