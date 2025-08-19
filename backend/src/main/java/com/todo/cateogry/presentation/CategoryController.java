@@ -1,5 +1,6 @@
 package com.todo.cateogry.presentation;
 
+import com.todo.auth.domain.Auth;
 import com.todo.cateogry.dto.CategoryRequest;
 import com.todo.cateogry.dto.CategoryResponse;
 import com.todo.cateogry.service.CategoryCommandService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Auth
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/categories")

@@ -23,6 +23,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        log.info("📌AuthorizationInterceptor 동작");
+
         if (!(handler instanceof HandlerMethod hm)) {
             return true;
         }
