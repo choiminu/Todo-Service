@@ -1,6 +1,6 @@
 package com.todo.auth.presentaion;
 
-import com.todo.auth.domain.LoginUser;
+import com.todo.common.session.LoginUser;
 import com.todo.auth.dto.LoginRequest;
 import com.todo.auth.service.AuthService;
 import com.todo.common.response.SuccessResponse;

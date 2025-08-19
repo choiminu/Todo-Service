@@ -1,4 +1,4 @@
-package com.todo.auth.domain;
+package com.todo.common.session;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import com.todo.auth.domain.LoginProvider;
-import com.todo.auth.domain.LoginUser;
+import com.todo.common.session.LoginUser;
 import com.todo.auth.dto.LoginRequest;
 import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
