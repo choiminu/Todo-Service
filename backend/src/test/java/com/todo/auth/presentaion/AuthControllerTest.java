@@ -1,5 +1,7 @@
 package com.todo.auth.presentaion;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -10,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.common.session.LoginUser;
 import com.todo.auth.dto.LoginRequest;
 import com.todo.auth.service.AuthService;
+import com.todo.common.session.SessionManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,6 +32,9 @@ class AuthControllerTest {
     ObjectMapper objectMapper;
 
     @MockitoBean
+    SessionManager sessionManager;
+
+    @MockitoBean
     AuthService authService;
 
     @Test
@@ -36,6 +42,7 @@ class AuthControllerTest {
         //given
         LoginRequest req = new LoginRequest("user@gmail.com", "rawPassword");
 
+        doNothing().when(sessionManager).create(any(), any());
         when(authService.login(null, req)).thenReturn(new LoginUser(1L));
 
         //when & then
