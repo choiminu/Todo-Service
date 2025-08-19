@@ -37,4 +37,9 @@ public class CategoryQueryService {
                 .findCategoryById(categoryId)
                 .orElseThrow(() -> new CategoryException(CATEGORY_NOT_FOUND));
     }
+
+    public Category findByIdAndUserId(Long categoryId, Long userId) {
+        return categoryRepository.findCategoryByIdAndUserId(categoryId, userId)
+                .orElseThrow(() -> new CategoryException(CATEGORY_NOT_FOUND));
+    }
 }

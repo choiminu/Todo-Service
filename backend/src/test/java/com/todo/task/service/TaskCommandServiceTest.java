@@ -1,12 +1,15 @@
 package com.todo.task.service;
 
+import static com.todo.common.exception.ErrorCode.CATEGORY_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.todo.cateogry.domain.Category;
+import com.todo.cateogry.exception.CategoryException;
 import com.todo.cateogry.service.CategoryQueryService;
+import com.todo.common.exception.ErrorCode;
 import com.todo.task.dto.TaskCreateRequest;
 import com.todo.task.dto.TaskResponse;
 import com.todo.task.entity.Task;
@@ -117,6 +120,28 @@ class TaskCommandServiceTest {
         Assertions.assertThat(result.getStartDate()).isEqualTo(req.getStartDate());
         Assertions.assertThat(result.getEndDate()).isEqualTo(req.getEndDate());
         Assertions.assertThat(result.getStatus()).isEqualTo(TaskStatus.NONE);
+    }
+
+    @Test
+    @DisplayName("카테고리가 없거나 다른 사용자의 카테고리 PK에 할일을 생성하면 예외가 발생한다.")
+    void 할일_생성_실패_카테고리_없음() {
+        // given
+        TaskCreateRequest req = new TaskCreateRequest(
+                999L,
+                "테스트 코드 작성하기",
+                "TaskService 테스트 코드 작성하자.",
+                "NONE",
+                LocalDate.now(),
+                LocalDate.now()
+        );
+
+        when(categoryQueryService.findByIdAndUserId(any(), any())).thenThrow(new CategoryException(CATEGORY_NOT_FOUND));
+
+        // when & then
+        Assertions.assertThatThrownBy(() -> taskCommandService.createTask(user.getId(), req))
+                .isInstanceOf(CategoryException.class)
+                .hasMessage(CATEGORY_NOT_FOUND.getMessage());
+
     }
 
 }
