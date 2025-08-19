@@ -1,21 +1,32 @@
 package com.todo.user.service;
 
-import com.todo.common.exception.ErrorCode;
+import static com.todo.common.exception.ErrorCode.USER_NOT_FOUND;
+
 import com.todo.user.domain.User;
 import com.todo.user.domain.repository.UserRepository;
 import com.todo.user.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserDomainService {
 
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public User findUserById(Long id) {
         return userRepository
                 .findUserById(id)
-                .orElseThrow(() -> new UserException(ErrorCode.EMAIL_NOT_UNIQUE));
+                .orElseThrow(() -> new UserException(USER_NOT_FOUND));
     }
+
+    public User findUserByEmail(String email) {
+        return userRepository
+                .findUserByEmail(email)
+                .orElseThrow(() -> new UserException(USER_NOT_FOUND));
+    }
+
 }
