@@ -1,0 +1,68 @@
+package com.todo.cateogry.service;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
+import com.todo.cateogry.domain.Category;
+import com.todo.cateogry.domain.repository.CategoryRepository;
+import com.todo.cateogry.dto.CategoryRequest;
+import com.todo.cateogry.dto.CategoryResponse;
+import com.todo.cateogry.mapper.CategoryMapper;
+import com.todo.user.domain.User;
+import com.todo.user.service.UserDomainService;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class CategoryQueryServiceTest {
+
+    @Mock
+    CategoryRepository categoryRepository;
+
+    @Mock
+    CategoryMapper categoryMapper;
+
+    @Mock
+    UserDomainService userDomainService;
+
+    @InjectMocks
+    CategoryQueryService categoryQueryService;
+
+    User user;
+
+    @BeforeEach
+    void beforeEach() {
+        this.user = User.builder()
+                .id(1L)
+                .build();
+    }
+
+    @Test
+    @DisplayName("사용자는 카테고리를 생성할 수 있다.")
+    void 카테고리_생성_성공() {
+        //given
+        Category category = Category.builder()
+                .id(1L)
+                .name("WORK")
+                .user(user)
+                .build();
+
+        CategoryRequest req = new CategoryRequest("WORK");
+
+        when(categoryMapper.categoryRequestToEntity(req)).thenReturn(category);
+        when(categoryMapper.EntityToCategoryResponse(category)).thenReturn(new CategoryResponse("WORK"));
+
+        //when
+        CategoryResponse res = categoryQueryService.create(user.getId(), req);
+
+        //then
+        Assertions.assertThat(res.getName()).isEqualTo(req.getName());
+    }
+
+}

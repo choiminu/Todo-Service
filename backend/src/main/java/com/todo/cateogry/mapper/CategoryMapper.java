@@ -2,9 +2,11 @@ package com.todo.cateogry.mapper;
 
 import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.dto.CategoryRequest;
+import com.todo.cateogry.dto.CategoryResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
     Category categoryRequestToEntity(CategoryRequest request);
+    CategoryResponse EntityToCategoryResponse(Category category);
 }
