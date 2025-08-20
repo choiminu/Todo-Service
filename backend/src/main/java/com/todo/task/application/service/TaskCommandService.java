@@ -36,7 +36,7 @@ public class TaskCommandService {
 
         taskRepository.save(task);
 
-        return taskMapper.entityToTaskResponse(task);
+        return taskMapper.toResponse(task);
     }
 
     public TaskResponse updateTask(Long taskId, Long userId, TaskUpdateRequest req) {
@@ -47,7 +47,7 @@ public class TaskCommandService {
         // 요청 DTO를 기반으로 조회한 Task의 상태를 업데이트한다.
         findTask.taskUpdate(req.getTitle(), req.getContent(), req.getStartDate(), req.getEndDate(), req.getStatus());
 
-        return taskMapper.entityToTaskResponse(findTask);
+        return taskMapper.toResponse(findTask);
     }
 
     public void deleteTask(Long taskId, Long userId) {

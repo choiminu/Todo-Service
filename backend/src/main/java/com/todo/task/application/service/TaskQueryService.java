@@ -35,12 +35,12 @@ public class TaskQueryService {
 
         // TaskMapper 클래스를 통해 조회된 Task List를 응답 DTO로 변환하여 반환한다.
         return tasks.stream()
-                .map(taskMapper::entityToTaskResponse)
+                .map(taskMapper::toResponse)
                 .toList();
     }
 
     public TaskResponse getTaskByTaskIdAndUserId(Long taskId, Long userId) {
-        return taskMapper.entityToTaskResponse(findTaskByTaskIdAndUserId(taskId, userId));
+        return taskMapper.toResponse(findTaskByTaskIdAndUserId(taskId, userId));
     }
 
     public Task findTaskByTaskIdAndUserId(Long taskId, Long userId) {

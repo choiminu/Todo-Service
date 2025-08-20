@@ -7,6 +7,7 @@ import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.vo.TaskPeriod;
 import com.todo.user.domain.User;
+import java.time.LocalDate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -26,18 +27,23 @@ public interface TaskMapper {
     }
 
     @Mapping(target = "categoryId", source = "category", qualifiedByName = "getCategoryId")
-    TaskResponse entityToTaskResponse(Task task);
+    @Mapping(target = "startDate", source = "period", qualifiedByName = "getStartDate")
+    @Mapping(target = "endDate", source = "period", qualifiedByName = "getEndDate")
+    TaskResponse toResponse(Task task);
 
     @Named("getCategoryId")
     default Long getCategoryId(Category category) {
         return category.getId();
     }
 
-    @Named("stringToTaskStatus")
-    default TaskStatus stringToTaskStatus(String status) {
-        if (status == null) {
-            return TaskStatus.NONE;
-        }
-        return TaskStatus.from(status);
+    @Named("getStartDate")
+    default LocalDate getStartDate(TaskPeriod period) {
+        return period.getStartDate();
     }
+
+    @Named("getEndDate")
+    default LocalDate getEndDate(TaskPeriod period) {
+        return period.getEndDate();
+    }
+
 }
