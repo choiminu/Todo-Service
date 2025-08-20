@@ -25,7 +25,7 @@ public class TaskCommandService {
 
     public TaskResponse createTask(Long userId, TaskCreateRequest request) {
         User findUser = userQueryService.findUserById(userId);
-        Category findCategory = categoryQueryService.findByIdAndUserId(request.getCategoryId(), userId);
+        Category findCategory = categoryQueryService.findCategoryByCategoryIdAndUserId(request.getCategoryId(), userId);
 
         Task task = taskMapper.taskCreateRequestToEntity(request);
         task.setUser(findUser);

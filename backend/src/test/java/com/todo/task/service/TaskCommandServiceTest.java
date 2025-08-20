@@ -140,7 +140,7 @@ class TaskCommandServiceTest {
                 LocalDate.now()
         );
 
-        when(categoryQueryService.findByIdAndUserId(any(), any())).thenThrow(new CategoryException(CATEGORY_NOT_FOUND));
+        when(categoryQueryService.findCategoryByCategoryIdAndUserId(any(), any())).thenThrow(new CategoryException(CATEGORY_NOT_FOUND));
 
         // when & then
         Assertions.assertThatThrownBy(() -> taskCommandService.createTask(user.getId(), req))

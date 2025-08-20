@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryCommandServiceTest {
+
     @Mock
     CategoryRepository categoryRepository;
 
@@ -80,7 +81,7 @@ class CategoryCommandServiceTest {
 
         CategoryRequest req = new CategoryRequest("EDIT");
 
-        when(categoryQueryService.findById(1L)).thenReturn(category);
+        when(categoryQueryService.findCategoryByCategoryIdAndUserId(1L, 1L)).thenReturn(category);
         when(categoryMapper.EntityToCategoryResponse(category)).thenReturn(new CategoryResponse("EDIT"));
 
         //when
