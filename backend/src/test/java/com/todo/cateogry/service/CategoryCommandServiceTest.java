@@ -63,7 +63,7 @@ class CategoryCommandServiceTest {
         when(categoryMapper.EntityToCategoryResponse(category)).thenReturn(new CategoryResponse("WORK"));
 
         //when
-        CategoryResponse res = categoryCommandService.create(user.getId(), req);
+        CategoryResponse res = categoryCommandService.createCategory(user.getId(), req);
 
         //then
         Assertions.assertThat(res.getName()).isEqualTo(req.getName());
@@ -85,7 +85,7 @@ class CategoryCommandServiceTest {
         when(categoryMapper.EntityToCategoryResponse(category)).thenReturn(new CategoryResponse("EDIT"));
 
         //when
-        CategoryResponse res = categoryCommandService.update(1L, user.getId(), req);
+        CategoryResponse res = categoryCommandService.updateCategory(1L, user.getId(), req);
 
         //then
         Assertions.assertThat(res.getName()).isEqualTo(req.getName());

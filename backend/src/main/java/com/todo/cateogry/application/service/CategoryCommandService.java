@@ -21,7 +21,7 @@ public class CategoryCommandService {
     private final UserQueryService userQueryService;
     private final CategoryMapper categoryMapper;
 
-    public CategoryResponse create(Long userId, CategoryRequest request) {
+    public CategoryResponse createCategory(Long userId, CategoryRequest request) {
         User findUser = userQueryService.findUserById(userId);
 
         Category category = categoryMapper.categoryRequestToEntity(request);
@@ -31,13 +31,13 @@ public class CategoryCommandService {
         return categoryMapper.EntityToCategoryResponse(category);
     }
 
-    public CategoryResponse update(Long categoryId, Long userId, CategoryRequest request) {
+    public CategoryResponse updateCategory(Long categoryId, Long userId, CategoryRequest request) {
         Category category = categoryQueryService.findCategoryByCategoryIdAndUserId(categoryId, userId);
         category.categoryUpdate(request.getName());
         return categoryMapper.EntityToCategoryResponse(category);
     }
 
-    public void delete(Long categoryId, Long userId) {
+    public void deleteCategory(Long categoryId, Long userId) {
         Category category = categoryQueryService.findCategoryByCategoryIdAndUserId(categoryId, userId);
         categoryRepository.delete(category);
     }

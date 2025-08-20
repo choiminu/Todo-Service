@@ -34,7 +34,7 @@ public class CategoryController {
             @Login LoginUser user,
             @RequestBody CategoryRequest request
     ) {
-        return SuccessResponse.success(HttpStatus.CREATED, categoryCommandService.create(user.getUserId(), request));
+        return SuccessResponse.success(HttpStatus.CREATED, categoryCommandService.createCategory(user.getUserId(), request));
     }
 
     @GetMapping
@@ -48,12 +48,12 @@ public class CategoryController {
             @PathVariable("id") Long categoryId,
             @RequestBody CategoryRequest request) {
         return SuccessResponse.success(HttpStatus.OK,
-                categoryCommandService.update(categoryId, user.getUserId(), request));
+                categoryCommandService.updateCategory(categoryId, user.getUserId(), request));
     }
 
     @DeleteMapping("/{id}")
     public SuccessResponse<Void> updateCategory(@Login LoginUser user, @PathVariable("id") Long categoryId) {
-        categoryCommandService.delete(categoryId, user.getUserId());
+        categoryCommandService.deleteCategory(categoryId, user.getUserId());
         return SuccessResponse.success(HttpStatus.OK);
     }
 
