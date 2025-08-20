@@ -38,6 +38,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class TaskCommandServiceTest {
 
+    public final static Long STUB_CATEGORY_ID = 1L;
+    public final static Long STUB_USER_ID = 1L;
+
     @Mock
     TaskRepository taskRepository;
 
@@ -84,18 +87,18 @@ class TaskCommandServiceTest {
     @DisplayName("사용자가 생성한 카테고리 내부에 Task를 생성할 수 있다.")
     void createTask_Success() {
         //given
-        TaskCreateRequest req = new TaskCreateRequest(1L, title, content, status, startDate, endDate);
-        TaskResponse res = new TaskResponse(1L, title, content, TaskStatus.PROGRESS, startDate, endDate);
+        TaskCreateRequest req = new TaskCreateRequest(STUB_CATEGORY_ID, title, content, status, startDate, endDate);
+        TaskResponse res = new TaskResponse(STUB_CATEGORY_ID, title, content, TaskStatus.PROGRESS, startDate, endDate);
 
         when(taskMapper.toEntity(any(), any(), any())).thenReturn(task);
         when(taskMapper.entityToTaskResponse(task)).thenReturn(res);
 
         //when
-        TaskResponse response = taskCommandService.createTask(1L, req);
+        TaskResponse response = taskCommandService.createTask(STUB_USER_ID, req);
 
         //then
         assertThat(response).isNotNull();
-        assertThat(response.getCategoryId()).isEqualTo(1L);
+        assertThat(response.getCategoryId()).isEqualTo(STUB_USER_ID);
         assertThat(response.getTitle()).isEqualTo(title);
         assertThat(response.getContent()).isEqualTo(content);
         assertThat(response.getStatus()).isEqualTo(TaskStatus.PROGRESS);
@@ -105,13 +108,13 @@ class TaskCommandServiceTest {
     @DisplayName("Task 생성 시 카테고리가 없다면 예외가 발생한다.")
     void createTask_fail_when_categoryNotFound() {
         //given
-        TaskCreateRequest req = new TaskCreateRequest(1L, title, content, status, startDate, endDate);
+        TaskCreateRequest req = new TaskCreateRequest(STUB_CATEGORY_ID, title, content, status, startDate, endDate);
 
-        when(categoryQueryService.findCategoryByCategoryIdAndUserId(1L, 1L)).thenThrow(
+        when(categoryQueryService.findCategoryByCategoryIdAndUserId(STUB_CATEGORY_ID, STUB_USER_ID)).thenThrow(
                 new CategoryException(CATEGORY_NOT_FOUND));
 
         //when & then
-        Assertions.assertThatThrownBy(() -> taskCommandService.createTask(1L, req))
+        Assertions.assertThatThrownBy(() -> taskCommandService.createTask(STUB_USER_ID, req))
                 .isInstanceOf(CategoryException.class)
                 .hasMessage(CATEGORY_NOT_FOUND.getMessage());
     }
@@ -120,13 +123,13 @@ class TaskCommandServiceTest {
     @DisplayName("Task 생성 시 사용자가 존재하지 않는다면 예외가 발생한다.")
     void createTask_fail_when_userNotFound() {
         //given
-        TaskCreateRequest req = new TaskCreateRequest(1L, title, content, status, startDate, endDate);
+        TaskCreateRequest req = new TaskCreateRequest(STUB_CATEGORY_ID, title, content, status, startDate, endDate);
 
         when(userQueryService.findUserById(any())).thenThrow(
                 new UserException(USER_NOT_FOUND));
 
         //when & then
-        Assertions.assertThatThrownBy(() -> taskCommandService.createTask(1L, req))
+        Assertions.assertThatThrownBy(() -> taskCommandService.createTask(STUB_USER_ID, req))
                 .isInstanceOf(UserException.class)
                 .hasMessage(USER_NOT_FOUND.getMessage());
     }
@@ -135,14 +138,14 @@ class TaskCommandServiceTest {
     @DisplayName("사용자는 자신의 Task를 수정할 수 있다.")
     void taskUpdate_success() {
         //given
-        TaskUpdateRequest req = new TaskUpdateRequest(1L, title, content, status, startDate, endDate);
-        TaskResponse res = new TaskResponse(1L, "change", "change", TaskStatus.DONE, startDate, endDate);
+        TaskUpdateRequest req = new TaskUpdateRequest(title, content, status, startDate, endDate);
+        TaskResponse res = new TaskResponse(STUB_CATEGORY_ID, "change", "change", TaskStatus.DONE, startDate, endDate);
 
         when(taskQueryService.findTaskByTaskIdAndUserId(any(), any())).thenReturn(task);
         when(taskMapper.entityToTaskResponse(any())).thenReturn(res);
 
         //when
-        TaskResponse response = taskCommandService.updateTask(1L, req);
+        TaskResponse response = taskCommandService.updateTask(task.getId(), STUB_USER_ID, req);
 
         //then
         assertThat(response.getTitle()).isEqualTo(res.getTitle());
@@ -154,12 +157,12 @@ class TaskCommandServiceTest {
     @DisplayName("Task 수정시 사용자 정보가 없거나 Task가 존재하지 않으면 예외가 발생한다.")
     void taskUpdate_fail_taskNotFound() {
         //given
-        TaskUpdateRequest req = new TaskUpdateRequest(1L, title, content, status, startDate, endDate);
+        TaskUpdateRequest req = new TaskUpdateRequest(title, content, status, startDate, endDate);
 
         when(taskQueryService.findTaskByTaskIdAndUserId(any(), any())).thenThrow(new TaskException(TASK_NOT_FOUND));
 
         //when & then
-        assertThatThrownBy(() -> taskCommandService.updateTask(1L, req))
+        assertThatThrownBy(() -> taskCommandService.updateTask(task.getId(), STUB_USER_ID, req))
                 .isInstanceOf(TaskException.class)
                 .hasMessage(TASK_NOT_FOUND.getMessage());
     }
@@ -168,18 +171,15 @@ class TaskCommandServiceTest {
     @DisplayName("사용자는 자신의 Task를 삭제할 수 있다.")
     void taskDelete_success() {
         //given
-        Long taskId = 1L;
-        Long userId = 1L;
-
         doNothing()
                 .doThrow(new TaskException(TASK_NOT_FOUND))
                 .when(taskRepository).delete(any());
 
         //when
-        taskCommandService.deleteTask(taskId, userId);
+        taskCommandService.deleteTask(task.getId(), STUB_USER_ID);
 
         //then
-        assertThatThrownBy(() -> taskCommandService.deleteTask(taskId, userId))
+        assertThatThrownBy(() -> taskCommandService.deleteTask(task.getId(), STUB_USER_ID))
                 .isInstanceOf(TaskException.class)
                 .hasMessage(TASK_NOT_FOUND.getMessage());
     }
@@ -188,13 +188,10 @@ class TaskCommandServiceTest {
     @DisplayName("Task 삭제시 Task가 없으면 예외가 발생한다.")
     void taskDelete_fail_taskNotFound() {
         //given
-        Long taskId = 1L;
-        Long userId = 1L;
-
         doThrow(new TaskException(TASK_NOT_FOUND)).when(taskRepository).delete(any());
 
         //when & then
-        assertThatThrownBy(() -> taskCommandService.deleteTask(taskId, userId))
+        assertThatThrownBy(() -> taskCommandService.deleteTask(task.getId(), STUB_USER_ID))
                 .isInstanceOf(TaskException.class)
                 .hasMessage(TASK_NOT_FOUND.getMessage());
     }
