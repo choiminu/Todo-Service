@@ -16,6 +16,7 @@ import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.application.mapper.TaskMapper;
+import com.todo.task.entity.vo.TaskPeriod;
 import com.todo.user.domain.User;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -77,8 +78,7 @@ class TaskQueryServiceTest {
                     .id(i)
                     .user(user)
                     .status(TaskStatus.NONE)
-                    .startDate(start)
-                    .endDate(start.plusDays(i))
+                    .period(new TaskPeriod(start, start.plusDays(1)))
                     .build());
         }
 
@@ -104,8 +104,8 @@ class TaskQueryServiceTest {
                         null,
                         null,
                         t.getStatus(),
-                        t.getStartDate(),
-                        t.getEndDate()
+                        t.getPeriod().getStartDate(),
+                        t.getPeriod().getEndDate()
                 );
             });
 

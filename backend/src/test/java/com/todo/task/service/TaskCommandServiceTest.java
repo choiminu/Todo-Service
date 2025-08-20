@@ -19,6 +19,7 @@ import com.todo.task.application.service.TaskQueryService;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
+import com.todo.task.entity.vo.TaskPeriod;
 import com.todo.task.exception.TaskException;
 import com.todo.task.application.mapper.TaskMapper;
 import com.todo.user.domain.User;
@@ -97,8 +98,7 @@ class TaskCommandServiceTest {
                 .title(req.getTitle())
                 .content(req.getContent())
                 .status(TaskStatus.NONE)
-                .startDate(req.getStartDate())
-                .endDate(req.getEndDate())
+                .period(new TaskPeriod(req.getStartDate(), req.getEndDate()))
                 .user(user)
                 .category(category)
                 .build();
@@ -108,8 +108,8 @@ class TaskCommandServiceTest {
                 task.getTitle(),
                 task.getContent(),
                 task.getStatus(),
-                task.getStartDate(),
-                task.getEndDate()
+                task.getPeriod().getStartDate(),
+                task.getPeriod().getEndDate()
         );
 
         when(userQueryService.findUserById(user.getId())).thenReturn(user);
@@ -159,8 +159,7 @@ class TaskCommandServiceTest {
                 .title("Todo 작성")
                 .content("HELLO WORLD")
                 .status(TaskStatus.NONE)
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now())
+                .period(new TaskPeriod(LocalDate.now(), LocalDate.now()))
                 .user(user)
                 .category(category)
                 .build();
@@ -207,8 +206,7 @@ class TaskCommandServiceTest {
                 .title("Todo 작성")
                 .content("HELLO WORLD")
                 .status(TaskStatus.NONE)
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now())
+                .period(new TaskPeriod(LocalDate.now(), LocalDate.now()))
                 .user(anotherUser)
                 .category(category)
                 .build();
@@ -240,8 +238,7 @@ class TaskCommandServiceTest {
                 .title("Todo 작성")
                 .content("HELLO WORLD")
                 .status(TaskStatus.NONE)
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now())
+                .period(new TaskPeriod(LocalDate.now(), LocalDate.now()))
                 .user(user)
                 .category(category)
                 .build();
@@ -268,8 +265,7 @@ class TaskCommandServiceTest {
                 .title("Todo 작성")
                 .content("HELLO WORLD")
                 .status(TaskStatus.NONE)
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now())
+                .period(new TaskPeriod(LocalDate.now(), LocalDate.now()))
                 .user(anotherUser)
                 .category(category)
                 .build();

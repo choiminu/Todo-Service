@@ -3,9 +3,11 @@ package com.todo.task.entity;
 import static com.todo.common.exception.ErrorCode.TASK_ACCESS_FORBIDDEN;
 
 import com.todo.cateogry.domain.Category;
+import com.todo.task.entity.vo.TaskPeriod;
 import com.todo.task.exception.TaskException;
 import com.todo.user.domain.User;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,11 +40,8 @@ public class Task {
     @Column(length = 2550)
     private String content;
 
-    @Column(nullable = false)
-    private LocalDate startDate;
-
-    @Column(nullable = false)
-    private LocalDate endDate;
+    @Embedded
+    private TaskPeriod period;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -73,12 +72,8 @@ public class Task {
             this.content = content;
         }
 
-        if (startDate != null) {
-            this.startDate = startDate;
-        }
-
-        if (endDate != null) {
-            this.endDate = endDate;
+        if (startDate != null || endDate != null) {
+            this.period.updateTaskPeriod(startDate, endDate);
         }
 
         if (status != null) {
