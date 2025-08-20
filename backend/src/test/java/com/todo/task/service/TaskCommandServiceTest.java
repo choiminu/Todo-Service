@@ -88,7 +88,8 @@ class TaskCommandServiceTest {
     void createTask_Success() {
         //given
         TaskCreateRequest req = new TaskCreateRequest(STUB_CATEGORY_ID, title, content, status, startDate, endDate);
-        TaskResponse res = new TaskResponse(STUB_CATEGORY_ID, title, content, TaskStatus.PROGRESS, startDate, endDate);
+        TaskResponse res = new TaskResponse(task.getId(), STUB_CATEGORY_ID, title, content, TaskStatus.PROGRESS,
+                startDate, endDate);
 
         when(taskMapper.toEntity(any(), any(), any())).thenReturn(task);
         when(taskMapper.toResponse(task)).thenReturn(res);
@@ -139,7 +140,7 @@ class TaskCommandServiceTest {
     void taskUpdate_success() {
         //given
         TaskUpdateRequest req = new TaskUpdateRequest(title, content, status, startDate, endDate);
-        TaskResponse res = new TaskResponse(STUB_CATEGORY_ID, "change", "change", TaskStatus.DONE, startDate, endDate);
+        TaskResponse res = new TaskResponse(task.getId(), STUB_CATEGORY_ID, "change", "change", TaskStatus.DONE, startDate, endDate);
 
         when(taskQueryService.findTaskByTaskIdAndUserId(any(), any())).thenReturn(task);
         when(taskMapper.toResponse(any())).thenReturn(res);

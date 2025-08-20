@@ -26,10 +26,12 @@ public interface TaskMapper {
                 .build();
     }
 
+    @Mapping(target = "taskId", source = "id")
     @Mapping(target = "categoryId", source = "category", qualifiedByName = "getCategoryId")
     @Mapping(target = "startDate", source = "period", qualifiedByName = "getStartDate")
     @Mapping(target = "endDate", source = "period", qualifiedByName = "getEndDate")
     TaskResponse toResponse(Task task);
+
 
     @Named("getCategoryId")
     default Long getCategoryId(Category category) {

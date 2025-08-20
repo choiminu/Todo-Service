@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TaskResponse {
+    private Long taskId;
     private Long categoryId;
     private String title;
     private String content;

@@ -73,7 +73,7 @@ public class Task {
         }
 
         if (startDate != null || endDate != null) {
-            this.period.updateTaskPeriod(startDate, endDate);
+            this.period = period.updateTaskPeriod(startDate, endDate);
         }
 
         if (status != null) {
