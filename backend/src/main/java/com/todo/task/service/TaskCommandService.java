@@ -1,7 +1,7 @@
 package com.todo.task.service;
 
 import com.todo.cateogry.domain.Category;
-import com.todo.cateogry.service.CategoryQueryService;
+import com.todo.cateogry.application.service.CategoryQueryService;
 import com.todo.task.dto.TaskCreateRequest;
 import com.todo.task.dto.TaskResponse;
 import com.todo.task.dto.TaskUpdateRequest;

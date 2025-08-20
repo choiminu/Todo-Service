@@ -1,12 +1,12 @@
-package com.todo.cateogry.service;
+package com.todo.cateogry.application.service;
 
 import static com.todo.common.exception.ErrorCode.CATEGORY_NOT_FOUND;
 
 import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.domain.repository.CategoryRepository;
-import com.todo.cateogry.dto.CategoryResponse;
+import com.todo.cateogry.application.dto.CategoryResponse;
 import com.todo.cateogry.exception.CategoryException;
-import com.todo.cateogry.mapper.CategoryMapper;
+import com.todo.cateogry.application.mapper.CategoryMapper;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

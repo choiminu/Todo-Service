@@ -1,10 +1,10 @@
-package com.todo.cateogry.service;
+package com.todo.cateogry.application.service;
 
 import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.domain.repository.CategoryRepository;
-import com.todo.cateogry.dto.CategoryRequest;
-import com.todo.cateogry.dto.CategoryResponse;
-import com.todo.cateogry.mapper.CategoryMapper;
+import com.todo.cateogry.application.dto.CategoryRequest;
+import com.todo.cateogry.application.dto.CategoryResponse;
+import com.todo.cateogry.application.mapper.CategoryMapper;
 import com.todo.user.domain.User;
 import com.todo.user.application.service.UserQueryService;
 import lombok.RequiredArgsConstructor;

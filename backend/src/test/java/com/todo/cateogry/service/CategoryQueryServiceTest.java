@@ -3,10 +3,11 @@ package com.todo.cateogry.service;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.todo.cateogry.application.service.CategoryQueryService;
 import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.domain.repository.CategoryRepository;
-import com.todo.cateogry.dto.CategoryResponse;
-import com.todo.cateogry.mapper.CategoryMapper;
+import com.todo.cateogry.application.dto.CategoryResponse;
+import com.todo.cateogry.application.mapper.CategoryMapper;
 import com.todo.user.domain.User;
 import com.todo.user.application.service.UserCommandService;
 import java.util.ArrayList;

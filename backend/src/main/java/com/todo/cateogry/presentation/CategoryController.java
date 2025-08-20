@@ -1,10 +1,10 @@
 package com.todo.cateogry.presentation;
 
 import com.todo.auth.domain.Auth;
-import com.todo.cateogry.dto.CategoryRequest;
-import com.todo.cateogry.dto.CategoryResponse;
-import com.todo.cateogry.service.CategoryCommandService;
-import com.todo.cateogry.service.CategoryQueryService;
+import com.todo.cateogry.application.dto.CategoryRequest;
+import com.todo.cateogry.application.dto.CategoryResponse;
+import com.todo.cateogry.application.service.CategoryCommandService;
+import com.todo.cateogry.application.service.CategoryQueryService;
 import com.todo.common.response.SuccessResponse;
 import com.todo.common.session.LoginUser;
 import com.todo.common.session.resolver.Login;
