@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import com.todo.common.exception.ErrorCode;
+import com.todo.user.application.service.UserQueryService;
 import com.todo.user.domain.User;
 import com.todo.user.domain.repository.UserRepository;
 import com.todo.user.exception.UserException;

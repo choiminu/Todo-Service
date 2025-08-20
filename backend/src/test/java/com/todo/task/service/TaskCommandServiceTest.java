@@ -20,7 +20,7 @@ import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.exception.TaskException;
 import com.todo.task.mapper.TaskMapper;
 import com.todo.user.domain.User;
-import com.todo.user.service.UserQueryService;
+import com.todo.user.application.service.UserQueryService;
 import java.time.LocalDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

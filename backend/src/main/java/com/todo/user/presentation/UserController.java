@@ -1,9 +1,8 @@
 package com.todo.user.presentation;
 
 import com.todo.common.response.SuccessResponse;
-import com.todo.user.dto.SignupRequest;
-import com.todo.user.service.UserCommandService;
-import com.todo.user.service.UserQueryService;
+import com.todo.user.application.dto.SignupRequest;
+import com.todo.user.application.service.UserCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

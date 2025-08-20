@@ -10,10 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.common.exception.ErrorCode;
 import com.todo.common.session.SessionManager;
-import com.todo.user.dto.SignupRequest;
+import com.todo.user.application.dto.SignupRequest;
 import com.todo.user.exception.UserException;
-import com.todo.user.service.UserCommandService;
-import com.todo.user.service.UserQueryService;
+import com.todo.user.application.service.UserCommandService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

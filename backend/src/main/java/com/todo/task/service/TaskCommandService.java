@@ -9,7 +9,7 @@ import com.todo.task.entity.Task;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.mapper.TaskMapper;
 import com.todo.user.domain.User;
-import com.todo.user.service.UserQueryService;
+import com.todo.user.application.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

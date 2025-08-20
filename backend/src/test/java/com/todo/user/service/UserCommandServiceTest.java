@@ -2,16 +2,16 @@ package com.todo.user.service;
 
 import static com.todo.common.exception.ErrorCode.EMAIL_NOT_UNIQUE;
 import static com.todo.common.exception.ErrorCode.PASSWORD_MISMATCH;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.todo.user.application.service.UserCommandService;
 import com.todo.user.domain.User;
 import com.todo.user.domain.repository.UserRepository;
-import com.todo.user.dto.SignupRequest;
+import com.todo.user.application.dto.SignupRequest;
 import com.todo.user.exception.UserException;
-import com.todo.user.mapper.UserMapper;
+import com.todo.user.application.mapper.UserMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

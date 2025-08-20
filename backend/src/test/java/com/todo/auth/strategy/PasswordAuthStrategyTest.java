@@ -11,7 +11,7 @@ import com.todo.auth.dto.LoginRequest;
 import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
 import com.todo.user.exception.UserException;
-import com.todo.user.service.UserQueryService;
+import com.todo.user.application.service.UserQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

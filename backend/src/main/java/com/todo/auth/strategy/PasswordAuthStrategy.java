@@ -8,7 +8,7 @@ import com.todo.auth.dto.LoginRequest;
 import com.todo.user.domain.User;
 import com.todo.user.domain.UserRole;
 import com.todo.user.exception.UserException;
-import com.todo.user.service.UserQueryService;
+import com.todo.user.application.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

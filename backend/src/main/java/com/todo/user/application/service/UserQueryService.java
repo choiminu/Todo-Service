@@ -1,4 +1,4 @@
-package com.todo.user.service;
+package com.todo.user.application.service;
 
 import static com.todo.common.exception.ErrorCode.USER_NOT_FOUND;
 

@@ -1,14 +1,13 @@
-package com.todo.user.service;
+package com.todo.user.application.service;
 
 import static com.todo.common.exception.ErrorCode.EMAIL_NOT_UNIQUE;
 import static com.todo.common.exception.ErrorCode.PASSWORD_MISMATCH;
-import static com.todo.common.exception.ErrorCode.USER_NOT_FOUND;
 
 import com.todo.user.domain.User;
 import com.todo.user.domain.repository.UserRepository;
-import com.todo.user.dto.SignupRequest;
+import com.todo.user.application.dto.SignupRequest;
 import com.todo.user.exception.UserException;
-import com.todo.user.mapper.UserMapper;
+import com.todo.user.application.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

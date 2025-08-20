@@ -8,7 +8,7 @@ import com.todo.cateogry.domain.repository.CategoryRepository;
 import com.todo.cateogry.dto.CategoryResponse;
 import com.todo.cateogry.mapper.CategoryMapper;
 import com.todo.user.domain.User;
-import com.todo.user.service.UserCommandService;
+import com.todo.user.application.service.UserCommandService;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
