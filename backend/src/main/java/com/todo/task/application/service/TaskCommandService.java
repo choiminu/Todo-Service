@@ -23,15 +23,19 @@ public class TaskCommandService {
     private final CategoryQueryService categoryQueryService;
     private final TaskMapper taskMapper;
 
-    public TaskResponse createTask(Long userId, TaskCreateRequest request) {
-        User findUser = userQueryService.findUserById(userId);
-        Category findCategory = categoryQueryService.findCategoryByCategoryIdAndUserId(request.getCategoryId(), userId);
+    public TaskResponse createTask(Long userId, TaskCreateRequest req) {
 
-        Task task = taskMapper.taskCreateRequestToEntity(request);
-        task.setUser(findUser);
-        task.setCategory(findCategory);
+        // 세션에 저장된 사용자의 id를 매개변수로 받아 사용자 엔티티를 조회한다.
+        User user = userQueryService.findUserById(userId);
+
+        // 요청 DTO의 categoryId와 userId로 해당 사용자의 카테고리를 단일 조회한다 (소유자 검증 겸용).
+        Category category = categoryQueryService.findCategoryByCategoryIdAndUserId(req.getCategoryId(), userId);
+
+        // 위 과정에서 조회된 사용자,카테고리와 요청 DTO를 매핑해 Task 엔티티를 생성한다.
+        Task task = taskMapper.toEntity(user, category, req);
 
         taskRepository.save(task);
+
         return taskMapper.entityToTaskResponse(task);
     }
 
