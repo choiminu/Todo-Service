@@ -39,10 +39,10 @@ public class TaskCommandService {
         return taskMapper.entityToTaskResponse(task);
     }
 
-    public TaskResponse updateTask(Long userId, TaskUpdateRequest req) {
+    public TaskResponse updateTask(Long taskId, Long userId, TaskUpdateRequest req) {
 
         // 세션에 저장된 사용자의 id와 Task id로 DB에 저장된 Task를 조회한다.
-        Task findTask = taskQueryService.findTaskByTaskIdAndUserId(req.getTaskId(), userId);
+        Task findTask = taskQueryService.findTaskByTaskIdAndUserId(taskId, userId);
 
         // 요청 DTO를 기반으로 조회한 Task의 상태를 업데이트한다.
         findTask.taskUpdate(req.getTitle(), req.getContent(), req.getStartDate(), req.getEndDate(), req.getStatus());

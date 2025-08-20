@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TaskUpdateRequest {
-    private Long taskId;
     private String title;
     private String content;
     private String status;
