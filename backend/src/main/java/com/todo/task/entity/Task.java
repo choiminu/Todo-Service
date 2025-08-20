@@ -3,11 +3,15 @@ package com.todo.task.entity;
 import static com.todo.common.exception.ErrorCode.TASK_ACCESS_FORBIDDEN;
 
 import com.todo.cateogry.domain.Category;
+import com.todo.task.entity.vo.TaskPeriod;
 import com.todo.task.exception.TaskException;
 import com.todo.user.domain.User;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,6 +23,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Builder
@@ -31,32 +37,30 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(length = 2550)
     private String content;
 
-    private LocalDate startDate;
-
-    private LocalDate endDate;
+    @Embedded
+    private TaskPeriod period;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TaskStatus status;
 
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
-
-    public void validateOwner(Long userId) {
-        if (!(this.user.getId().equals(userId))) {
-            throw new TaskException(TASK_ACCESS_FORBIDDEN);
-        }
-    }
 
     public void taskUpdate(String title, String content, LocalDate startDate, LocalDate endDate, String status) {
         if (title != null) {
@@ -67,12 +71,8 @@ public class Task {
             this.content = content;
         }
 
-        if (startDate != null) {
-            this.startDate = startDate;
-        }
-
-        if (endDate != null) {
-            this.endDate = endDate;
+        if (startDate != null || endDate != null) {
+            this.period = period.updateTaskPeriod(startDate, endDate);
         }
 
         if (status != null) {

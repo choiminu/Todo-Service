@@ -1,8 +1,6 @@
 package com.todo.cateogry.domain;
 
-import static com.todo.common.exception.ErrorCode.CATEGORY_UPDATE_FORBIDDEN;
 
-import com.todo.cateogry.exception.CategoryException;
 import com.todo.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +15,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -35,6 +35,7 @@ public class Category {
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     public void categoryUpdate(String name) {

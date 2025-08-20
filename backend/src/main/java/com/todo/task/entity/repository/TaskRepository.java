@@ -8,4 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface TaskRepository extends JpaRepository<Task, Long>, TaskRepositoryCustom{
     @Query("SELECT t FROM Task t WHERE t.id = :taskId")
     Optional<Task> findTaskById(Long taskId);
+
+    @Query("SELECT t FROM Task t WHERE t.id = :taskId AND t.user.id = :userId")
+    Optional<Task> findTaskByTaskIdAndUserId(Long taskId, Long userId);
 }

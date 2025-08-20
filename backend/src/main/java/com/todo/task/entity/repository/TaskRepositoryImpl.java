@@ -24,13 +24,13 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom{
 
         if (categoryId != null) where.and(t.category.id.eq(categoryId));
         if (status != null)     where.and(t.status.eq(status));
-        if (from != null)       where.and(t.startDate.goe(from));
-        if (to != null)         where.and(t.endDate.loe(to));
+        if (from != null)       where.and(t.period.startDate.goe(from));
+        if (to != null)         where.and(t.period.endDate.loe(to));
 
         return qf.selectFrom(t)
                 .leftJoin(t.category).fetchJoin()
                 .where(where)
-                .orderBy(t.startDate.asc(), t.id.desc())
+                .orderBy(t.period.startDate.asc(), t.id.desc())
                 .fetch();
     }
 }
