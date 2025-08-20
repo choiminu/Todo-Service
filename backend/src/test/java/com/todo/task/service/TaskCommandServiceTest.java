@@ -3,7 +3,6 @@ package com.todo.task.service;
 import static com.todo.common.exception.ErrorCode.CATEGORY_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,7 +20,7 @@ import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.exception.TaskException;
 import com.todo.task.mapper.TaskMapper;
 import com.todo.user.domain.User;
-import com.todo.user.service.UserDomainService;
+import com.todo.user.service.UserCommandService;
 import java.time.LocalDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +38,7 @@ class TaskCommandServiceTest {
     TaskRepository taskRepository;
 
     @Mock
-    UserDomainService userDomainService;
+    UserCommandService userCommandService;
 
     @Mock
     TaskMapper taskMapper;
@@ -111,7 +110,7 @@ class TaskCommandServiceTest {
                 task.getEndDate()
         );
 
-        when(userDomainService.findUserById(user.getId())).thenReturn(user);
+        when(userCommandService.findUserById(user.getId())).thenReturn(user);
         when(taskMapper.taskCreateRequestToEntity(req)).thenReturn(task);
         when(taskRepository.save(any(Task.class))).thenReturn(task);
         when(taskMapper.entityToTaskResponse(task)).thenReturn(resp);

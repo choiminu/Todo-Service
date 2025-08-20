@@ -8,7 +8,7 @@ import com.todo.auth.dto.LoginRequest;
 import com.todo.user.domain.User;
 import com.todo.user.domain.UserRole;
 import com.todo.user.exception.UserException;
-import com.todo.user.service.UserDomainService;
+import com.todo.user.service.UserCommandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PasswordAuthStrategy implements AuthStrategy{
 
-    private final UserDomainService userDomainService;
+    private final UserCommandService userCommandService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -32,7 +32,7 @@ public class PasswordAuthStrategy implements AuthStrategy{
         final String email = request.getEmail();
         final String password = request.getPassword();
 
-        User findUser = userDomainService.findUserByEmail(email);
+        User findUser = userCommandService.findUserByEmail(email);
         if (!(passwordEncoder.matches(password, findUser.getPassword()))) {
             throw new UserException(LOGIN_FAIL);
         }

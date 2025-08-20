@@ -11,7 +11,7 @@ import com.todo.auth.dto.LoginRequest;
 import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
 import com.todo.user.exception.UserException;
-import com.todo.user.service.UserDomainService;
+import com.todo.user.service.UserCommandService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class PasswordAuthStrategyTest {
 
     @Mock
-    UserDomainService userDomainService;
+    UserCommandService userCommandService;
 
     @Mock
     PasswordEncoder passwordEncoder;
@@ -67,7 +67,7 @@ class PasswordAuthStrategyTest {
         //given
         LoginRequest request = new LoginRequest(email, password);
 
-        when(userDomainService.findUserByEmail(email)).thenReturn(user);
+        when(userCommandService.findUserByEmail(email)).thenReturn(user);
         when(passwordEncoder.matches(request.getPassword(), user.getPassword())).thenReturn(true);
 
         //when
@@ -83,7 +83,7 @@ class PasswordAuthStrategyTest {
         //given
         LoginRequest request = new LoginRequest(email, password);
 
-        when(userDomainService.findUserByEmail(email)).thenReturn(user);
+        when(userCommandService.findUserByEmail(email)).thenReturn(user);
         when(passwordEncoder.matches(request.getPassword(), user.getPassword())).thenReturn(false);
 
         //when & then

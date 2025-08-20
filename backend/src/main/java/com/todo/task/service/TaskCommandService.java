@@ -9,7 +9,7 @@ import com.todo.task.entity.Task;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.mapper.TaskMapper;
 import com.todo.user.domain.User;
-import com.todo.user.service.UserDomainService;
+import com.todo.user.service.UserCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +19,12 @@ public class TaskCommandService {
 
     private final TaskRepository taskRepository;
     private final TaskQueryService taskQueryService;
-    private final UserDomainService userDomainService;
+    private final UserCommandService userCommandService;
     private final CategoryQueryService categoryQueryService;
     private final TaskMapper taskMapper;
 
     public TaskResponse createTask(Long userId, TaskCreateRequest request) {
-        User findUser = userDomainService.findUserById(userId);
+        User findUser = userCommandService.findUserById(userId);
         Category findCategory = categoryQueryService.findByIdAndUserId(request.getCategoryId(), userId);
 
         Task task = taskMapper.taskCreateRequestToEntity(request);

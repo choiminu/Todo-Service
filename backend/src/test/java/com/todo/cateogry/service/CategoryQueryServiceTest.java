@@ -1,17 +1,14 @@
 package com.todo.cateogry.service;
 
-import static com.todo.cateogry.domain.QCategory.category;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.domain.repository.CategoryRepository;
-import com.todo.cateogry.dto.CategoryRequest;
 import com.todo.cateogry.dto.CategoryResponse;
 import com.todo.cateogry.mapper.CategoryMapper;
 import com.todo.user.domain.User;
-import com.todo.user.service.UserDomainService;
+import com.todo.user.service.UserCommandService;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -33,7 +30,7 @@ class CategoryQueryServiceTest {
     CategoryMapper categoryMapper;
 
     @Mock
-    UserDomainService userDomainService;
+    UserCommandService userCommandService;
 
     @InjectMocks
     CategoryQueryService categoryQueryService;
