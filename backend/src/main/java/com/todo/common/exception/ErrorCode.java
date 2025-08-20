@@ -30,6 +30,8 @@ public enum ErrorCode {
      */
     TASK_NOT_FOUND(HttpStatus.BAD_REQUEST, "T01", "해당 Task를 찾을 수 없습니다."),
     TASK_ACCESS_FORBIDDEN(HttpStatus.BAD_REQUEST, "T02", "해당 Task의 접근 권한이 없습니다."),
+    TASK_PERIOD_INVALID(HttpStatus.BAD_REQUEST, "T03", "유효하지 않은 기간입니다."),
+
 
 
     /**

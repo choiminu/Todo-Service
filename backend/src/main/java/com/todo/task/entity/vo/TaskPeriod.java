@@ -1,5 +1,8 @@
 package com.todo.task.entity.vo;
 
+import static com.todo.common.exception.ErrorCode.TASK_PERIOD_INVALID;
+
+import com.todo.task.exception.TaskException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.time.LocalDate;
@@ -25,7 +28,7 @@ public class TaskPeriod {
 
     public void validateTaskPeriod(LocalDate startDate, LocalDate endDate) {
         if (startDate == null || endDate == null || endDate.isBefore(startDate)) {
-            throw new RuntimeException("유효하지 않은 기간입니다.");
+            throw new TaskException(TASK_PERIOD_INVALID);
         }
     }
 
