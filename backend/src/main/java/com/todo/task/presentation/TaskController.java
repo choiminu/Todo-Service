@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
+import com.todo.auth.domain.Auth;
 import com.todo.common.response.SuccessResponse;
 import com.todo.common.session.LoginUser;
 import com.todo.common.session.resolver.Login;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+@Auth
 @RestController
 @RequestMapping("/api/task")
 @RequiredArgsConstructor
@@ -72,7 +74,7 @@ public class TaskController {
             @PathVariable("id") Long taskId,
             @Login LoginUser loginUser
     ) {
-        taskCommandService.deleteTask(loginUser.getUserId(), taskId);
+        taskCommandService.deleteTask(taskId, loginUser.getUserId());
         return SuccessResponse.success(NO_CONTENT);
     }
 
