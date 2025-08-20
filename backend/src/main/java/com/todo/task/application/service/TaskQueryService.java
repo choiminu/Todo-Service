@@ -9,35 +9,34 @@ import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.exception.TaskException;
 import com.todo.task.application.mapper.TaskMapper;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TaskQueryService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
 
-    public List<TaskResponse> findAll(Long userId, TaskSearchRequest request) {
+    public List<TaskResponse> searchUserTasks(Long userId, TaskSearchRequest req) {
 
+        // 사용자 ID와 요청의 검색 조건(categoryId, 기간[startDate~endDate], 상태)을 기반으로 작업 목록을 조회한다.
         List<Task> tasks = taskRepository.search(
                 userId,
-                request.getCategoryId(),
-                request.getStartDate(),
-                request.getEndDate(),
-                TaskStatus.from(request.getStatus())
+                req.getCategoryId(),
+                req.getStartDate(),
+                req.getEndDate(),
+                TaskStatus.from(req.getStatus())
         );
 
-        List<TaskResponse> result = new ArrayList<>();
-
-        for (Task task : tasks) {
-            result.add(taskMapper.entityToTaskResponse(task));
-        }
-
-        return result;
+        // TaskMapper 클래스를 통해 조회된 Task List를 응답 DTO로 변환하여 반환한다.
+        return tasks.stream()
+                .map(taskMapper::entityToTaskResponse)
+                .toList();
     }
 
     public Task findTaskByTaskIdAndUserId(Long taskId, Long userId) {

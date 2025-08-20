@@ -46,7 +46,7 @@ public class TaskController {
             @Login LoginUser loginUser,
             @ModelAttribute TaskSearchRequest request
     ) {
-        return SuccessResponse.success(HttpStatus.OK, taskQueryService.findAll(loginUser.getUserId(), request));
+        return SuccessResponse.success(HttpStatus.OK, taskQueryService.searchUserTasks(loginUser.getUserId(), request));
     }
 
     @PutMapping
