@@ -37,12 +37,6 @@ public class Category {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public void validateOwner(Long userId) {
-        if (!this.user.getId().equals(userId)) {
-            throw new CategoryException(CATEGORY_UPDATE_FORBIDDEN);
-        }
-    }
-
     public void categoryUpdate(String name) {
         if (name != null) {
             this.name = name;

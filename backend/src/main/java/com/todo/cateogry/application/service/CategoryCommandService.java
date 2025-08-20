@@ -38,8 +38,7 @@ public class CategoryCommandService {
     }
 
     public void delete(Long categoryId, Long userId) {
-        Category category = categoryQueryService.findById(categoryId);
-        category.validateOwner(userId);
+        Category category = categoryQueryService.findCategoryByCategoryIdAndUserId(categoryId, userId);
         categoryRepository.delete(category);
     }
 }
