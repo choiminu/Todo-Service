@@ -34,7 +34,7 @@ public class CategoryCommandService {
     public CategoryResponse update(Long categoryId, Long userId, CategoryRequest request) {
         Category category = categoryQueryService.findById(categoryId);
         category.validateOwner(userId);
-        category.update(request.getName());
+        category.categoryUpdate(request.getName());
         return categoryMapper.EntityToCategoryResponse(category);
     }
 

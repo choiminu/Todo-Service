@@ -3,8 +3,8 @@ package com.todo.cateogry.domain;
 import static com.todo.common.exception.ErrorCode.CATEGORY_UPDATE_FORBIDDEN;
 
 import com.todo.cateogry.exception.CategoryException;
-import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,15 +23,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public void validateOwner(Long userId) {
@@ -39,11 +41,11 @@ public class Category {
             throw new CategoryException(CATEGORY_UPDATE_FORBIDDEN);
         }
     }
-    public void update(String name) {
+
+    public void categoryUpdate(String name) {
         if (name != null) {
             this.name = name;
         }
     }
-
 
 }
