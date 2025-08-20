@@ -1,8 +1,8 @@
-package com.todo.cateogry.mapper;
+package com.todo.cateogry.application.mapper;
 
 import com.todo.cateogry.domain.Category;
-import com.todo.cateogry.dto.CategoryRequest;
-import com.todo.cateogry.dto.CategoryResponse;
+import com.todo.cateogry.application.dto.CategoryRequest;
+import com.todo.cateogry.application.dto.CategoryResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

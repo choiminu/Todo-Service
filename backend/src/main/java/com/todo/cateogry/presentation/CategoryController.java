@@ -1,10 +1,10 @@
 package com.todo.cateogry.presentation;
 
 import com.todo.auth.domain.Auth;
-import com.todo.cateogry.dto.CategoryRequest;
-import com.todo.cateogry.dto.CategoryResponse;
-import com.todo.cateogry.service.CategoryCommandService;
-import com.todo.cateogry.service.CategoryQueryService;
+import com.todo.cateogry.application.dto.CategoryRequest;
+import com.todo.cateogry.application.dto.CategoryResponse;
+import com.todo.cateogry.application.service.CategoryCommandService;
+import com.todo.cateogry.application.service.CategoryQueryService;
 import com.todo.common.response.SuccessResponse;
 import com.todo.common.session.LoginUser;
 import com.todo.common.session.resolver.Login;
@@ -34,12 +34,12 @@ public class CategoryController {
             @Login LoginUser user,
             @RequestBody CategoryRequest request
     ) {
-        return SuccessResponse.success(HttpStatus.CREATED, categoryCommandService.create(user.getUserId(), request));
+        return SuccessResponse.success(HttpStatus.CREATED, categoryCommandService.createCategory(user.getUserId(), request));
     }
 
     @GetMapping
     public SuccessResponse<List<CategoryResponse>> findCategories(@Login LoginUser user) {
-        return SuccessResponse.success(HttpStatus.OK, categoryQueryService.findAll(user.getUserId()));
+        return SuccessResponse.success(HttpStatus.OK, categoryQueryService.findAllByUserId(user.getUserId()));
     }
 
     @PutMapping("/{id}")
@@ -48,12 +48,12 @@ public class CategoryController {
             @PathVariable("id") Long categoryId,
             @RequestBody CategoryRequest request) {
         return SuccessResponse.success(HttpStatus.OK,
-                categoryCommandService.update(categoryId, user.getUserId(), request));
+                categoryCommandService.updateCategory(categoryId, user.getUserId(), request));
     }
 
     @DeleteMapping("/{id}")
     public SuccessResponse<Void> updateCategory(@Login LoginUser user, @PathVariable("id") Long categoryId) {
-        categoryCommandService.delete(categoryId, user.getUserId());
+        categoryCommandService.deleteCategory(categoryId, user.getUserId());
         return SuccessResponse.success(HttpStatus.OK);
     }
 

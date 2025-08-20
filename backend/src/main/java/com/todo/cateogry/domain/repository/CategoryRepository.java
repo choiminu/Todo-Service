@@ -1,7 +1,6 @@
 package com.todo.cateogry.domain.repository;
 
 import com.todo.cateogry.domain.Category;
-import com.todo.user.domain.User;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,9 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT c FROM Category c WHERE c.user.id = :userId")
     List<Category> findCategoriesByUserId(Long userId);
-
-    @Query("SELECT c FROM Category c WHERE c.id = :id")
-    Optional<Category> findCategoryById(Long id);
 
     @Query("SELECT c FROM Category c WHERE c.id = :id AND c.user.id = :userId")
     Optional<Category> findCategoryByIdAndUserId(Long id, Long userId);

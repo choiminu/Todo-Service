@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.exception.CategoryException;
-import com.todo.cateogry.service.CategoryQueryService;
+import com.todo.cateogry.application.service.CategoryQueryService;
 import com.todo.common.exception.ErrorCode;
 import com.todo.task.dto.TaskCreateRequest;
 import com.todo.task.dto.TaskResponse;
@@ -140,7 +140,7 @@ class TaskCommandServiceTest {
                 LocalDate.now()
         );
 
-        when(categoryQueryService.findByIdAndUserId(any(), any())).thenThrow(new CategoryException(CATEGORY_NOT_FOUND));
+        when(categoryQueryService.findCategoryByCategoryIdAndUserId(any(), any())).thenThrow(new CategoryException(CATEGORY_NOT_FOUND));
 
         // when & then
         Assertions.assertThatThrownBy(() -> taskCommandService.createTask(user.getId(), req))

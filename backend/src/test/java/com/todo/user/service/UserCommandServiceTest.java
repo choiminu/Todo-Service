@@ -49,7 +49,7 @@ class UserCommandServiceTest {
 
     @Test
     @DisplayName("이메일과 비밀번호를 기반으로 회원가입을 할 수 있다.")
-    void 회원가입_성공() {
+    void signup_success() {
         //given
         SignupRequest req = new SignupRequest(email, password, confirmPassword);
 
@@ -65,7 +65,7 @@ class UserCommandServiceTest {
 
     @Test
     @DisplayName("회원가입시 패스워드는 암호화되어 저장된다.")
-    void 패스워드_암호화() {
+    void passwordEncoding_success() {
         //given
         SignupRequest req = new SignupRequest(email, password, confirmPassword);
 
@@ -86,7 +86,7 @@ class UserCommandServiceTest {
 
     @Test
     @DisplayName("이미 가입된 이메일로 회원가입을 하는 경우 예외가 발생한다.")
-    void 회원가입_실패_이메일_중복() {
+    void signup_fail_when_email_already_exits() {
         //given
         SignupRequest req = new SignupRequest(email, password, confirmPassword);
 
@@ -100,7 +100,7 @@ class UserCommandServiceTest {
 
     @Test
     @DisplayName("회원가입 과정에서 패스워드와 패스워드 확인 값이 다르면 예외가 발생한다.")
-    void 회원가입_실패_패스워드_불일치() {
+    void signup_fail_when_passwordMismatch() {
         //given
         SignupRequest req = new SignupRequest(email, password, "wrongPassword");
 
