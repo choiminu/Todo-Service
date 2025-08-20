@@ -20,7 +20,7 @@ import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.exception.TaskException;
 import com.todo.task.mapper.TaskMapper;
 import com.todo.user.domain.User;
-import com.todo.user.service.UserCommandService;
+import com.todo.user.service.UserQueryService;
 import java.time.LocalDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ class TaskCommandServiceTest {
     TaskRepository taskRepository;
 
     @Mock
-    UserCommandService userCommandService;
+    UserQueryService userQueryService;
 
     @Mock
     TaskMapper taskMapper;
@@ -110,7 +110,7 @@ class TaskCommandServiceTest {
                 task.getEndDate()
         );
 
-        when(userCommandService.findUserById(user.getId())).thenReturn(user);
+        when(userQueryService.findUserById(user.getId())).thenReturn(user);
         when(taskMapper.taskCreateRequestToEntity(req)).thenReturn(task);
         when(taskRepository.save(any(Task.class))).thenReturn(task);
         when(taskMapper.entityToTaskResponse(task)).thenReturn(resp);

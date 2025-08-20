@@ -9,6 +9,7 @@ import com.todo.cateogry.dto.CategoryResponse;
 import com.todo.cateogry.mapper.CategoryMapper;
 import com.todo.user.domain.User;
 import com.todo.user.service.UserCommandService;
+import com.todo.user.service.UserQueryService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +28,7 @@ class CategoryCommandServiceTest {
     CategoryMapper categoryMapper;
 
     @Mock
-    UserCommandService userCommandService;
+    UserQueryService userQueryService;
 
     @Mock
     CategoryQueryService categoryQueryService;

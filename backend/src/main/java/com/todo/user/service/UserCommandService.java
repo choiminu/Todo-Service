@@ -45,19 +45,4 @@ public class UserCommandService {
             throw new UserException(PASSWORD_MISMATCH);
         }
     }
-
-
-    @Transactional(readOnly = true)
-    public User findUserById(Long id) {
-        return userRepository
-                .findUserById(id)
-                .orElseThrow(() -> new UserException(USER_NOT_FOUND));
-    }
-
-    public User findUserByEmail(String email) {
-        return userRepository
-                .findUserByEmail(email)
-                .orElseThrow(() -> new UserException(USER_NOT_FOUND));
-    }
-
 }
