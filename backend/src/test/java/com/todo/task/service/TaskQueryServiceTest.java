@@ -1,6 +1,8 @@
 package com.todo.task.service;
 
+import static com.todo.common.exception.ErrorCode.TASK_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
@@ -9,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import com.todo.common.exception.ErrorCode;
 import com.todo.task.application.dto.response.TaskResponse;
 import com.todo.task.application.dto.request.TaskSearchRequest;
 import com.todo.task.application.service.TaskQueryService;
@@ -17,11 +20,13 @@ import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.application.mapper.TaskMapper;
 import com.todo.task.entity.vo.TaskPeriod;
+import com.todo.task.exception.TaskException;
 import com.todo.user.domain.User;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,27 +47,55 @@ class TaskQueryServiceTest {
     @InjectMocks
     TaskQueryService taskQueryService;
 
+    Task task;
+    String title;
+    String content;
+    String status;
+    LocalDate startDate;
+    LocalDate endDate;
+
+    @BeforeEach
+    void beforeEach() {
+        title = "알고리즘 공부";
+        content = "DP 문제 풀기";
+        status = "PROGRESS";
+        startDate = LocalDate.now();
+        endDate = LocalDate.now();
+
+        task = Task.builder()
+                .id(1L)
+                .title(title)
+                .content(content)
+                .status(TaskStatus.from(status))
+                .period(new TaskPeriod(startDate, endDate))
+                .build();
+    }
 
     @Test
-    @DisplayName("Task의 고유한 ID로 Task를 조회할 수 있다.")
-    void 할일_검색_성공() {
+    @DisplayName("사용자는 TaskId로 Task를 조회할 수 있다.")
+    void findTaskByTaskIdAndUserId_success() {
         //given
-        Task task = Task.builder()
-                .id(1L)
-                .title("TaskService 테스트 코드 작성")
-                .content("Hello world")
-                .status(TaskStatus.PROGRESS)
-                .build();
-
-        when(taskRepository.findTaskById(1L)).thenReturn(Optional.of(task));
+        when(taskRepository.findTaskByTaskIdAndUserId(any(), any())).thenReturn(Optional.of(task));
 
         //when
-        Task findTask = taskQueryService.findById(1L);
+        Task findTask = taskQueryService.findTaskByTaskIdAndUserId(1L, 1L);
 
         //then
         assertThat(task.getId()).isEqualTo(findTask.getId());
         assertThat(task.getTitle()).isEqualTo(findTask.getTitle());
         assertThat(task.getStatus()).isEqualTo(TaskStatus.PROGRESS);
+    }
+
+    @Test
+    @DisplayName("Task를 조회할때 Task가 존재하지 않는다면 예외가 발생한다.")
+    void findTaskByTaskIdAndUserId_fail_when_taskNotFound() {
+        //given
+        when(taskRepository.findTaskByTaskIdAndUserId(any(), any())).thenReturn(Optional.empty());
+
+        //when & then
+        assertThatThrownBy(() ->  taskQueryService.findTaskByTaskIdAndUserId(1L, 1L))
+                .isInstanceOf(TaskException.class)
+                .hasMessage(TASK_NOT_FOUND.getMessage());
     }
 
     @Test
