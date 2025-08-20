@@ -42,6 +42,14 @@ public class TaskController {
         return SuccessResponse.success(CREATED, taskCommandService.createTask(loginUser.getUserId(), request));
     }
 
+    @GetMapping("/{id}")
+    public SuccessResponse<TaskResponse> findTask(
+            @PathVariable("id") Long taskId,
+            @Login LoginUser loginUser
+    ) {
+        return SuccessResponse.success(OK, taskQueryService.getTaskByTaskIdAndUserId(taskId, loginUser.getUserId()));
+    }
+
     @GetMapping
     public SuccessResponse<List<TaskResponse>> searchTask(
             @Login LoginUser loginUser,

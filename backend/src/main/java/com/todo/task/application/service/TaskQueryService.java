@@ -39,6 +39,10 @@ public class TaskQueryService {
                 .toList();
     }
 
+    public TaskResponse getTaskByTaskIdAndUserId(Long taskId, Long userId) {
+        return taskMapper.entityToTaskResponse(findTaskByTaskIdAndUserId(taskId, userId));
+    }
+
     public Task findTaskByTaskIdAndUserId(Long taskId, Long userId) {
         return taskRepository.findTaskByTaskIdAndUserId(taskId, userId)
                 .orElseThrow(() -> new TaskException(TASK_NOT_FOUND));
