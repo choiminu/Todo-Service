@@ -1,5 +1,6 @@
 package com.todo.task.presentation;
 
+import static com.todo.common.response.SuccessResponse.success;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
@@ -41,7 +42,7 @@ public class TaskController {
             @Login LoginUser loginUser,
             @RequestBody TaskCreateRequest request
     ) {
-        return SuccessResponse.success(CREATED, taskCommandService.createTask(loginUser.getUserId(), request));
+        return success(CREATED, taskCommandService.createTask(loginUser.getUserId(), request));
     }
 
     @GetMapping("/{id}")
@@ -49,7 +50,7 @@ public class TaskController {
             @PathVariable("id") Long taskId,
             @Login LoginUser loginUser
     ) {
-        return SuccessResponse.success(OK, taskQueryService.getTaskByTaskIdAndUserId(taskId, loginUser.getUserId()));
+        return success(OK, taskQueryService.getTaskByTaskIdAndUserId(taskId, loginUser.getUserId()));
     }
 
     @GetMapping
@@ -57,7 +58,7 @@ public class TaskController {
             @Login LoginUser loginUser,
             @ModelAttribute TaskSearchRequest request
     ) {
-        return SuccessResponse.success(OK, taskQueryService.searchUserTasks(loginUser.getUserId(), request));
+        return success(OK, taskQueryService.searchUserTasks(loginUser.getUserId(), request));
     }
 
     @PatchMapping("/{id}")
@@ -66,7 +67,7 @@ public class TaskController {
             @Login LoginUser loginUser,
             @RequestBody TaskUpdateRequest request
     ) {
-       return SuccessResponse.success(OK, taskCommandService.updateTask(taskId, loginUser.getUserId(), request));
+        return success(OK, taskCommandService.updateTask(taskId, loginUser.getUserId(), request));
     }
 
     @DeleteMapping("/{id}")
@@ -75,7 +76,7 @@ public class TaskController {
             @Login LoginUser loginUser
     ) {
         taskCommandService.deleteTask(taskId, loginUser.getUserId());
-        return SuccessResponse.success(NO_CONTENT);
+        return success(NO_CONTENT);
     }
 
 }
