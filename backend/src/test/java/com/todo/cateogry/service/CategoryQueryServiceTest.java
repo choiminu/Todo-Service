@@ -57,7 +57,7 @@ class CategoryQueryServiceTest {
         when(categoryRepository.findCategoriesByUserId(1L)).thenReturn(categories);
 
         //when
-        List<CategoryResponse> responses = categoryQueryService.findAll(user.getId());
+        List<CategoryResponse> responses = categoryQueryService.findAllByUserId(user.getId());
 
         //then
         Assertions.assertThat(responses.size()).isEqualTo(10);

@@ -39,7 +39,7 @@ public class CategoryController {
 
     @GetMapping
     public SuccessResponse<List<CategoryResponse>> findCategories(@Login LoginUser user) {
-        return SuccessResponse.success(HttpStatus.OK, categoryQueryService.findAll(user.getUserId()));
+        return SuccessResponse.success(HttpStatus.OK, categoryQueryService.findAllByUserId(user.getUserId()));
     }
 
     @PutMapping("/{id}")

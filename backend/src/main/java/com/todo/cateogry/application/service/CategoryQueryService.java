@@ -7,7 +7,6 @@ import com.todo.cateogry.domain.repository.CategoryRepository;
 import com.todo.cateogry.application.dto.CategoryResponse;
 import com.todo.cateogry.exception.CategoryException;
 import com.todo.cateogry.application.mapper.CategoryMapper;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,15 +20,11 @@ public class CategoryQueryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    public List<CategoryResponse> findAll(Long userId) {
-        List<Category> categories = categoryRepository.findCategoriesByUserId(userId);
-
-        List<CategoryResponse> res = new ArrayList<>();
-        for (Category category : categories) {
-            res.add(categoryMapper.EntityToCategoryResponse(category));
-        }
-
-        return res;
+    public List<CategoryResponse> findAllByUserId(Long userId) {
+        return categoryRepository.findCategoriesByUserId(userId)
+                .stream()
+                .map(categoryMapper::EntityToCategoryResponse)
+                .toList();
     }
 
     public Category findById(Long categoryId) {
