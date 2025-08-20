@@ -1,6 +1,5 @@
 package com.todo.cateogry.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import com.todo.cateogry.domain.Category;
@@ -9,7 +8,7 @@ import com.todo.cateogry.dto.CategoryRequest;
 import com.todo.cateogry.dto.CategoryResponse;
 import com.todo.cateogry.mapper.CategoryMapper;
 import com.todo.user.domain.User;
-import com.todo.user.service.UserDomainService;
+import com.todo.user.application.service.UserQueryService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +27,7 @@ class CategoryCommandServiceTest {
     CategoryMapper categoryMapper;
 
     @Mock
-    UserDomainService userDomainService;
+    UserQueryService userQueryService;
 
     @Mock
     CategoryQueryService categoryQueryService;

@@ -1,4 +1,4 @@
-package com.todo.user.service;
+package com.todo.user.application.service;
 
 import static com.todo.common.exception.ErrorCode.USER_NOT_FOUND;
 
@@ -10,13 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class UserDomainService {
+public class UserQueryService {
 
     private final UserRepository userRepository;
 
-    @Transactional(readOnly = true)
     public User findUserById(Long id) {
         return userRepository
                 .findUserById(id)

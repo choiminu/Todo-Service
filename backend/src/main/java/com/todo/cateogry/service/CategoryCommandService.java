@@ -6,7 +6,7 @@ import com.todo.cateogry.dto.CategoryRequest;
 import com.todo.cateogry.dto.CategoryResponse;
 import com.todo.cateogry.mapper.CategoryMapper;
 import com.todo.user.domain.User;
-import com.todo.user.service.UserDomainService;
+import com.todo.user.application.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +18,11 @@ public class CategoryCommandService {
 
     private final CategoryQueryService categoryQueryService;
     private final CategoryRepository categoryRepository;
-    private final UserDomainService userDomainService;
+    private final UserQueryService userQueryService;
     private final CategoryMapper categoryMapper;
 
     public CategoryResponse create(Long userId, CategoryRequest request) {
-        User findUser = userDomainService.findUserById(userId);
+        User findUser = userQueryService.findUserById(userId);
 
         Category category = categoryMapper.categoryRequestToEntity(request);
         category.setUser(findUser);

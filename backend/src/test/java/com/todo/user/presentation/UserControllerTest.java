@@ -10,9 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.common.exception.ErrorCode;
 import com.todo.common.session.SessionManager;
-import com.todo.user.dto.SignupRequest;
+import com.todo.user.application.dto.SignupRequest;
 import com.todo.user.exception.UserException;
-import com.todo.user.service.UserQueryService;
+import com.todo.user.application.service.UserCommandService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ class UserControllerTest {
     ObjectMapper objectMapper;
 
     @MockitoBean
-    UserQueryService userQueryService;
+    UserCommandService userCommandService;
 
     @MockitoBean
     SessionManager sessionManager;
@@ -53,7 +53,7 @@ class UserControllerTest {
     void 회원가입_성공() throws Exception {
         //given
         SignupRequest request = new SignupRequest(email, password, confirmPassword);
-        when(userQueryService.signup(any())).thenReturn(1L);
+        when(userCommandService.signup(any())).thenReturn(1L);
 
         //when & then
         mockMvc.perform(post("/api/users")
@@ -70,7 +70,7 @@ class UserControllerTest {
     void 회원가입_실패() throws Exception {
         //given
         SignupRequest request = new SignupRequest(email, password, confirmPassword);
-        when(userQueryService.signup(any())).thenThrow(new UserException(ErrorCode.EMAIL_NOT_UNIQUE));
+        when(userCommandService.signup(any())).thenThrow(new UserException(ErrorCode.EMAIL_NOT_UNIQUE));
 
         //when & then
         mockMvc.perform(post("/api/users")

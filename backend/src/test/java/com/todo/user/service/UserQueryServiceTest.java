@@ -1,26 +1,24 @@
 package com.todo.user.service;
 
-import static com.todo.common.exception.ErrorCode.EMAIL_NOT_UNIQUE;
-import static com.todo.common.exception.ErrorCode.PASSWORD_MISMATCH;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import com.todo.common.exception.ErrorCode;
+import com.todo.user.application.service.UserQueryService;
 import com.todo.user.domain.User;
 import com.todo.user.domain.repository.UserRepository;
-import com.todo.user.dto.SignupRequest;
 import com.todo.user.exception.UserException;
-import com.todo.user.mapper.UserMapper;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class UserQueryServiceTest {
@@ -28,94 +26,82 @@ class UserQueryServiceTest {
     @Mock
     UserRepository userRepository;
 
-    @Mock
-    UserMapper userMapper;
-
-    @Mock
-    PasswordEncoder passwordEncoder;
-
     @InjectMocks
     UserQueryService userQueryService;
 
-    User user;
-    String email;
-    String password;
-    String confirmPassword;
-
-    @BeforeEach
-    void beforeEach() {
-        this.email = "user@gmail.com";
-        this.password = "user1234";
-        this.confirmPassword = "user1234";
-
-        user = User.builder()
-                .id(1L)
-                .email(email)
-                .password(password)
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 3L})
+    @DisplayName("ID로 사용자 조회에 성공한다")
+    void findUserById_success(Long userId) {
+        // given
+        User user = User.builder()
+                .id(userId)
+                .email("test" + userId + "@gmail.com")
+                .password("encodedPassword")
                 .build();
+
+        when(userRepository.findUserById(userId)).thenReturn(Optional.of(user));
+
+        // when
+        User findUser = userQueryService.findUserById(userId);
+
+        // then
+        assertThat(findUser).isNotNull();
+        assertThat(findUser.getId()).isEqualTo(userId);
+        assertThat(findUser.getEmail()).isEqualTo("test" + userId + "@gmail.com");
     }
 
-    @Test
-    @DisplayName("이메일과 비밀번호를 기반으로 회원가입을 할 수 있다.")
-    void 회원가입_성공() {
-        //given
-        SignupRequest req = new SignupRequest(email, password, confirmPassword);
+    @ParameterizedTest
+    @ValueSource(longs = {99L, 123L})
+    @DisplayName("ID로 사용자 조회 시 존재하지 않으면 예외가 발생한다")
+    void findUserById_fail(Long userId) {
+        // given
+        when(userRepository.findUserById(userId)).thenReturn(Optional.empty());
 
-        when(userRepository.save(any())).thenReturn(user);
-        when(userMapper.signupRequestToEntity(any())).thenReturn(user);
-
-        //when
-        Long userId = userQueryService.signup(req);
-
-        //then
-        Assertions.assertThat(userId).isEqualTo(1L);
-    }
-
-    @Test
-    @DisplayName("회원가입시 패스워드는 암호화되어 저장된다.")
-    void 패스워드_암호화() {
-        //given
-        SignupRequest req = new SignupRequest(email, password, confirmPassword);
-
-        when(userMapper.signupRequestToEntity(any())).thenReturn(user);
-        when(passwordEncoder.encode(password)).thenReturn("encodedPassword");
-
-        //when
-        userQueryService.signup(req);
-
-        //then
-        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(captor.capture());
-
-        User savedUser = captor.getValue();
-        Assertions.assertThat(savedUser.getPassword()).isEqualTo("encodedPassword");
-
-    }
-
-    @Test
-    @DisplayName("이미 가입된 이메일로 회원가입을 하는 경우 예외가 발생한다.")
-    void 회원가입_실패_이메일_중복() {
-        //given
-        SignupRequest req = new SignupRequest(email, password, confirmPassword);
-
-        when(userRepository.existsByEmail(email)).thenReturn(true);
-
-        //when & then
-        Assertions.assertThatThrownBy(() -> userQueryService.signup(req))
+        // when & then
+        Assertions.assertThatThrownBy(() -> userQueryService.findUserById(userId))
                 .isInstanceOf(UserException.class)
-                .hasMessage(EMAIL_NOT_UNIQUE.getMessage());
+                .hasMessage(ErrorCode.USER_NOT_FOUND.getMessage());
     }
 
-    @Test
-    @DisplayName("회원가입 과정에서 패스워드와 패스워드 확인 값이 다르면 예외가 발생한다.")
-    void 회원가입_실패_패스워드_불일치() {
-        //given
-        SignupRequest req = new SignupRequest(email, password, "wrongPassword");
+    @ParameterizedTest
+    @CsvSource({
+            "1, test@gmail.com",
+            "2, hello@gmail.com"
+    })
+    @DisplayName("이메일로 사용자 조회에 성공한다")
+    void findUserByEmail_success(Long userId, String email) {
+        // given
+        User user = User.builder()
+                .id(userId)
+                .email(email)
+                .password("encodedPassword")
+                .build();
 
-        //when & then
-        Assertions.assertThatThrownBy(() -> userQueryService.signup(req))
+        when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(user));
+
+        // when
+        User findUser = userQueryService.findUserByEmail(email);
+
+        // then
+        assertThat(findUser).isNotNull();
+        assertThat(findUser.getId()).isEqualTo(userId);
+        assertThat(findUser.getEmail()).isEqualTo(email);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"admin@yahoo.com", "not@@@@"})
+    @DisplayName("이메일로 사용자 조회 시 존재하지 않으면 예외가 발생한다")
+    void findUserByEmail_fail(String email) {
+        // given
+        when(userRepository.findUserByEmail(email)).thenReturn(Optional.empty());
+
+        // when & then
+        Assertions.assertThatThrownBy(() -> userQueryService.findUserByEmail(email))
                 .isInstanceOf(UserException.class)
-                .hasMessage(PASSWORD_MISMATCH.getMessage());
+                .hasMessage(ErrorCode.USER_NOT_FOUND.getMessage());
     }
+
+
 
 }
