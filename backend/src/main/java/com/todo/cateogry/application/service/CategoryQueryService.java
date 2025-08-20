@@ -27,12 +27,6 @@ public class CategoryQueryService {
                 .toList();
     }
 
-    public Category findById(Long categoryId) {
-        return categoryRepository
-                .findCategoryById(categoryId)
-                .orElseThrow(() -> new CategoryException(CATEGORY_NOT_FOUND));
-    }
-
     public Category findCategoryByCategoryIdAndUserId(Long categoryId, Long userId) {
         return categoryRepository
                 .findCategoryByIdAndUserId(categoryId, userId)

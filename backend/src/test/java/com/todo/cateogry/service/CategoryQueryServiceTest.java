@@ -53,7 +53,7 @@ class CategoryQueryServiceTest {
         for (int i = 1; i <= 10; i++) {
             categories.add(Category.builder().id((long) i).name("title" + i).user(user).build());
         }
-        when(categoryMapper.EntityToCategoryResponse(any())).thenReturn(new CategoryResponse("WORK"));
+        when(categoryMapper.EntityToCategoryResponse(any())).thenReturn(new CategoryResponse(1L, "WORK"));
         when(categoryRepository.findCategoriesByUserId(1L)).thenReturn(categories);
 
         //when
