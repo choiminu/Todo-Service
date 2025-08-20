@@ -6,6 +6,8 @@ import static com.todo.common.exception.ErrorCode.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +37,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -180,7 +183,7 @@ class TaskCommandServiceTest {
     }
 
     @Test
-    @DisplayName("Task 수정 시 사용자 정보가 없거나 Task가 존재하지 않으면 예외가 발생한다.")
+    @DisplayName("Task 수정시 사용자 정보가 없거나 Task가 존재하지 않으면 예외가 발생한다.")
     void taskUpdate_fail_taskNotFound() {
         //given
         TaskUpdateRequest req = new TaskUpdateRequest(1L, title, content, status, startDate, endDate);
@@ -195,50 +198,37 @@ class TaskCommandServiceTest {
 
     @Test
     @DisplayName("사용자는 자신의 Task를 삭제할 수 있다.")
-    void 할일_삭제_성공() {
+    void taskDelete_success() {
         //given
-        Task task = Task.builder()
-                .id(1L)
-                .title("Todo 작성")
-                .content("HELLO WORLD")
-                .status(TaskStatus.NONE)
-                .period(new TaskPeriod(LocalDate.now(), LocalDate.now()))
-                .user(user)
-                .category(category)
-                .build();
+        Long taskId = 1L;
+        Long userId = 1L;
 
-        when(taskQueryService.findById(1L)).thenReturn(task);
+        doNothing()
+                .doThrow(new TaskException(TASK_NOT_FOUND))
+                .when(taskRepository).delete(any());
 
         //when
-        taskCommandService.deleteTask(user.getId(), 1L);
+        taskCommandService.deleteTask(taskId, userId);
 
         //then
-        verify(taskRepository).delete(task);
+        assertThatThrownBy(() -> taskCommandService.deleteTask(taskId, userId))
+                .isInstanceOf(TaskException.class)
+                .hasMessage(TASK_NOT_FOUND.getMessage());
     }
 
     @Test
-    @DisplayName("다른 사용자의 Task를 삭제할 경우 예외가 발생한다.")
-    void 할일_삭제_실패() {
+    @DisplayName("Task 삭제시 Task가 없으면 예외가 발생한다.")
+    void taskDelete_fail_taskNotFound() {
         //given
-        User anotherUser = User.builder()
-                .id(2L)
-                .build();
+        Long taskId = 1L;
+        Long userId = 1L;
 
-        Task task = Task.builder()
-                .id(1L)
-                .title("Todo 작성")
-                .content("HELLO WORLD")
-                .status(TaskStatus.NONE)
-                .period(new TaskPeriod(LocalDate.now(), LocalDate.now()))
-                .user(anotherUser)
-                .category(category)
-                .build();
+        doThrow(new TaskException(TASK_NOT_FOUND)).when(taskRepository).delete(any());
 
-        when(taskQueryService.findById(1L)).thenReturn(task);
-
-        //when
-        assertThatThrownBy(() -> taskCommandService.deleteTask(user.getId(), 1L))
-                .isInstanceOf(TaskException.class);
+        //when & then
+        assertThatThrownBy(() -> taskCommandService.deleteTask(taskId, userId))
+                .isInstanceOf(TaskException.class)
+                .hasMessage(TASK_NOT_FOUND.getMessage());
     }
 
 }
