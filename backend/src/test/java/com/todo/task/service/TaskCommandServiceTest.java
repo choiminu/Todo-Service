@@ -8,13 +8,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.exception.CategoryException;
 import com.todo.cateogry.application.service.CategoryQueryService;
-import com.todo.common.exception.ErrorCode;
 import com.todo.task.application.dto.request.TaskCreateRequest;
 import com.todo.task.application.dto.response.TaskResponse;
 import com.todo.task.application.dto.request.TaskUpdateRequest;
@@ -26,19 +23,14 @@ import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.entity.vo.TaskPeriod;
 import com.todo.task.exception.TaskException;
 import com.todo.task.application.mapper.TaskMapper;
-import com.todo.user.domain.User;
 import com.todo.user.application.service.UserQueryService;
 import com.todo.user.exception.UserException;
 import java.time.LocalDate;
-import net.bytebuddy.asm.Advice.Local;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -64,14 +56,7 @@ class TaskCommandServiceTest {
     @InjectMocks
     TaskCommandService taskCommandService;
 
-    User user;
-    Category category;
-    String email;
-    String password;
-    String confirmPassword;
-
     Task task;
-
     String title;
     String content;
     String status;
@@ -80,27 +65,11 @@ class TaskCommandServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        this.email = "user@gmail.com";
-        this.password = "user1234";
-        this.confirmPassword = "user1234";
-
         title = "알고리즘 공부";
         content = "DP 문제 풀기";
         status = "PROGRESS";
         startDate = LocalDate.now();
         endDate = LocalDate.now();
-
-        user = User.builder()
-                .id(1L)
-                .email(email)
-                .password(password)
-                .build();
-
-        category = Category.builder()
-                .id(1L)
-                .name("WORK")
-                .user(user)
-                .build();
 
         task = Task.builder()
                 .id(1L)
@@ -109,7 +78,6 @@ class TaskCommandServiceTest {
                 .status(TaskStatus.from(status))
                 .period(new TaskPeriod(startDate, endDate))
                 .build();
-
     }
 
     @Test
