@@ -1,6 +1,7 @@
 package com.todo.task.service;
 
 import static com.todo.common.exception.ErrorCode.CATEGORY_NOT_FOUND;
+import static com.todo.common.exception.ErrorCode.TASK_NOT_FOUND;
 import static com.todo.common.exception.ErrorCode.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -159,82 +160,37 @@ class TaskCommandServiceTest {
                 .hasMessage(USER_NOT_FOUND.getMessage());
     }
 
-
     @Test
-    @DisplayName("사용자는 자신의 Task의 정보를 수정할 수 있다.")
-    void 할일_수정_성공() {
+    @DisplayName("사용자는 자신의 Task를 수정할 수 있다.")
+    void taskUpdate_success() {
         //given
-        Task task = Task.builder()
-                .id(1L)
-                .title("Todo 작성")
-                .content("HELLO WORLD")
-                .status(TaskStatus.NONE)
-                .period(new TaskPeriod(LocalDate.now(), LocalDate.now()))
-                .user(user)
-                .category(category)
-                .build();
+        TaskUpdateRequest req = new TaskUpdateRequest(1L, title, content, status, startDate, endDate);
+        TaskResponse res = new TaskResponse(1L, "change", "change", TaskStatus.DONE, startDate, endDate);
 
-        TaskUpdateRequest req = new TaskUpdateRequest(
-                1L,
-                "Todo 수정",
-                "hello world",
-                "PROGRESS",
-                LocalDate.now(),
-                LocalDate.now()
-        );
-
-        TaskResponse resp = new TaskResponse(
-                task.getId(),
-                req.getTitle(),
-                req.getContent(),
-                TaskStatus.PROGRESS,
-                req.getStartDate(),
-                req.getEndDate()
-        );
-
-        when(taskQueryService.findById(1L)).thenReturn(task);
-        when(taskMapper.entityToTaskResponse(task)).thenReturn(resp);
+        when(taskQueryService.findTaskByTaskIdAndUserId(any(), any())).thenReturn(task);
+        when(taskMapper.entityToTaskResponse(any())).thenReturn(res);
 
         //when
-        TaskResponse response = taskCommandService.updateTask(user.getId(), req);
+        TaskResponse response = taskCommandService.updateTask(1L, req);
 
         //then
-        assertThat(response.getTitle()).isEqualTo(req.getTitle());
+        assertThat(response.getTitle()).isEqualTo(res.getTitle());
+        assertThat(response.getContent()).isEqualTo(res.getContent());
+        assertThat(response.getStatus()).isEqualTo(TaskStatus.DONE);
     }
 
     @Test
-    @DisplayName("자신의 소유가 아닌 Task를 수정할 경우 예외가 발생한다.")
-    void 할일_수정_실패() {
+    @DisplayName("Task 수정 시 사용자 정보가 없거나 Task가 존재하지 않으면 예외가 발생한다.")
+    void taskUpdate_fail_taskNotFound() {
         //given
-        User anotherUser = User.builder()
-                .id(2L)
-                .build();
+        TaskUpdateRequest req = new TaskUpdateRequest(1L, title, content, status, startDate, endDate);
 
-        Task task = Task.builder()
-                .id(1L)
-                .title("Todo 작성")
-                .content("HELLO WORLD")
-                .status(TaskStatus.NONE)
-                .period(new TaskPeriod(LocalDate.now(), LocalDate.now()))
-                .user(anotherUser)
-                .category(category)
-                .build();
-
-        TaskUpdateRequest req = new TaskUpdateRequest(
-                1L,
-                "Todo 수정",
-                "hello world",
-                "PROGRESS",
-                LocalDate.now(),
-                LocalDate.now()
-        );
-
-        when(taskQueryService.findById(any())).thenReturn(task);
+        when(taskQueryService.findTaskByTaskIdAndUserId(any(), any())).thenThrow(new TaskException(TASK_NOT_FOUND));
 
         //when & then
-        assertThatThrownBy(() -> taskCommandService.updateTask(user.getId(), req))
+        assertThatThrownBy(() -> taskCommandService.updateTask(1L, req))
                 .isInstanceOf(TaskException.class)
-                .hasMessage(ErrorCode.TASK_ACCESS_FORBIDDEN.getMessage());
+                .hasMessage(TASK_NOT_FOUND.getMessage());
     }
 
     @Test

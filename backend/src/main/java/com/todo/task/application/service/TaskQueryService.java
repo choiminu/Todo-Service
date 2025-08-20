@@ -45,4 +45,9 @@ public class TaskQueryService {
                 .orElseThrow(() -> new TaskException(TASK_NOT_FOUND));
     }
 
+    public Task findTaskByTaskIdAndUserId(Long taskId, Long userId) {
+        return taskRepository.findTaskByTaskIdAndUserId(taskId, userId)
+                .orElseThrow(() -> new TaskException(TASK_NOT_FOUND));
+    }
+
 }
