@@ -2,8 +2,8 @@ package com.todo.task.application.service;
 
 import static com.todo.common.exception.ErrorCode.TASK_NOT_FOUND;
 
-import com.todo.task.application.dto.TaskResponse;
-import com.todo.task.application.dto.TaskSearchRequest;
+import com.todo.task.application.dto.response.TaskResponse;
+import com.todo.task.application.dto.request.TaskSearchRequest;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;

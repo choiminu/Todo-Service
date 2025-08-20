@@ -9,8 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import com.todo.task.application.dto.TaskResponse;
-import com.todo.task.application.dto.TaskSearchRequest;
+import com.todo.task.application.dto.response.TaskResponse;
+import com.todo.task.application.dto.request.TaskSearchRequest;
 import com.todo.task.application.service.TaskQueryService;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;

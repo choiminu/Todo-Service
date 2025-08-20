@@ -2,9 +2,9 @@ package com.todo.task.application.service;
 
 import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.application.service.CategoryQueryService;
-import com.todo.task.application.dto.TaskCreateRequest;
-import com.todo.task.application.dto.TaskResponse;
-import com.todo.task.application.dto.TaskUpdateRequest;
+import com.todo.task.application.dto.request.TaskCreateRequest;
+import com.todo.task.application.dto.response.TaskResponse;
+import com.todo.task.application.dto.request.TaskUpdateRequest;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.application.mapper.TaskMapper;
