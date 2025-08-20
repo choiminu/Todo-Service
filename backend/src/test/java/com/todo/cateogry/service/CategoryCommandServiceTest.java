@@ -61,7 +61,7 @@ class CategoryCommandServiceTest {
             "3, DEV"
     })
     @DisplayName("사용자는 카테고리를 생성할 수 있다.")
-    void 카테고리_생성_성공(Long categoryId, String categoryName) {
+    void createCategory_success(Long categoryId, String categoryName) {
         //given
         Category category = Category.builder()
                 .id(categoryId)
@@ -87,7 +87,7 @@ class CategoryCommandServiceTest {
             "2, LIFE, WORK"
     })
     @DisplayName("사용자는 카테고리를 수정할 수 있다.")
-    void 카테고리_수정_성공(Long categoryId, String before, String after) {
+    void updateCategory_success(Long categoryId, String before, String after) {
 
         //given
         Category category = Category.builder()
@@ -115,7 +115,8 @@ class CategoryCommandServiceTest {
             "1, 1,",
             "2, 2"
     })
-    void 카테고리_삭제_성공(Long categoryId, Long userId) {
+    @DisplayName("사용자는 자신의 카테고리를 삭제할 수 있다.")
+    void deleteCategory_success(Long categoryId, Long userId) {
         //given
         doNothing()
                 .doThrow(new CategoryException(ErrorCode.CATEGORY_NOT_FOUND))
