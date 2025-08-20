@@ -23,6 +23,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Builder
@@ -51,18 +53,14 @@ public class Task {
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
-
-    public void validateOwner(Long userId) {
-        if (!(this.user.getId().equals(userId))) {
-            throw new TaskException(TASK_ACCESS_FORBIDDEN);
-        }
-    }
 
     public void taskUpdate(String title, String content, LocalDate startDate, LocalDate endDate, String status) {
         if (title != null) {

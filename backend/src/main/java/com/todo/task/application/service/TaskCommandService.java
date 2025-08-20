@@ -8,7 +8,6 @@ import com.todo.task.application.dto.request.TaskUpdateRequest;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.application.mapper.TaskMapper;
-import com.todo.user.application.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,6 @@ public class TaskCommandService {
 
     private final TaskRepository taskRepository;
     private final TaskQueryService taskQueryService;
-    private final UserQueryService userQueryService;
     private final CategoryQueryService categoryQueryService;
     private final TaskMapper taskMapper;
 
