@@ -1,8 +1,8 @@
-package com.todo.task.mapper;
+package com.todo.task.application.mapper;
 
 import com.todo.cateogry.domain.Category;
-import com.todo.task.dto.TaskCreateRequest;
-import com.todo.task.dto.TaskResponse;
+import com.todo.task.application.dto.TaskCreateRequest;
+import com.todo.task.application.dto.TaskResponse;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import org.mapstruct.Mapper;

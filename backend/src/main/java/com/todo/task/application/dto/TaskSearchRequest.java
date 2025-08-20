@@ -1,4 +1,4 @@
-package com.todo.task.dto;
+package com.todo.task.application.dto;
 
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -6,10 +6,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class TaskCreateRequest {
+public class TaskSearchRequest {
     private Long categoryId;
-    private String title;
-    private String content;
     private String status;
     private LocalDate startDate;
     private LocalDate endDate;

@@ -1,7 +1,6 @@
 package com.todo.task.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
@@ -10,12 +9,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import com.todo.task.dto.TaskResponse;
-import com.todo.task.dto.TaskSearchRequest;
+import com.todo.task.application.dto.TaskResponse;
+import com.todo.task.application.dto.TaskSearchRequest;
+import com.todo.task.application.service.TaskQueryService;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
-import com.todo.task.mapper.TaskMapper;
+import com.todo.task.application.mapper.TaskMapper;
 import com.todo.user.domain.User;
 import java.time.LocalDate;
 import java.util.ArrayList;

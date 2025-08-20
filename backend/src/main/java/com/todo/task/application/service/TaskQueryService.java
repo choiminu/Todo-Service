@@ -1,15 +1,14 @@
-package com.todo.task.service;
+package com.todo.task.application.service;
 
 import static com.todo.common.exception.ErrorCode.TASK_NOT_FOUND;
 
-import com.todo.auth.domain.Auth;
-import com.todo.task.dto.TaskResponse;
-import com.todo.task.dto.TaskSearchRequest;
+import com.todo.task.application.dto.TaskResponse;
+import com.todo.task.application.dto.TaskSearchRequest;
 import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.exception.TaskException;
-import com.todo.task.mapper.TaskMapper;
+import com.todo.task.application.mapper.TaskMapper;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

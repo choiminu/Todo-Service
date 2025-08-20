@@ -1,17 +1,16 @@
-package com.todo.task.dto;
+package com.todo.task.application.dto;
 
-import com.todo.task.entity.TaskStatus;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class TaskResponse {
-    private Long categoryId;
+public class TaskUpdateRequest {
+    private Long taskId;
     private String title;
     private String content;
-    private TaskStatus status;
+    private String status;
     private LocalDate startDate;
     private LocalDate endDate;
 }
