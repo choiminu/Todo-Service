@@ -5,9 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
+import com.todo.auth.application.strategy.PasswordAuthStrategy;
 import com.todo.auth.domain.LoginProvider;
 import com.todo.common.session.LoginUser;
-import com.todo.auth.dto.LoginRequest;
+import com.todo.auth.application.dto.LoginRequest;
 import com.todo.common.exception.ErrorCode;
 import com.todo.user.domain.User;
 import com.todo.user.exception.UserException;

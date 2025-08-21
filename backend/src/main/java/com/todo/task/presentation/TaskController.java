@@ -19,7 +19,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/task")
 @RequiredArgsConstructor
-public class TaskController {
+public class TaskController implements TaskApiDocs{
 
     private final TaskQueryService taskQueryService;
     private final TaskCommandService taskCommandService;
@@ -56,7 +55,7 @@ public class TaskController {
     @GetMapping
     public SuccessResponse<List<TaskResponse>> searchTask(
             @Login LoginUser loginUser,
-            @ModelAttribute TaskSearchRequest request
+            @RequestBody TaskSearchRequest request
     ) {
         return success(OK, taskQueryService.searchUserTasks(loginUser.getUserId(), request));
     }
@@ -71,7 +70,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public SuccessResponse<Void> DeleteTask(
+    public SuccessResponse<Void> deleteTask(
             @PathVariable("id") Long taskId,
             @Login LoginUser loginUser
     ) {

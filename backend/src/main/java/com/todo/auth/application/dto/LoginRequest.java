@@ -1,4 +1,4 @@
-package com.todo.auth.dto;
+package com.todo.auth.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
