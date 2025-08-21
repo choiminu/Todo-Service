@@ -231,7 +231,7 @@ public interface TaskApiDocs {
     })
     SuccessResponse<List<TaskResponse>> searchTask(
             @Login LoginUser loginUser,
-            @RequestBody(
+            @Parameter(
                     description = "할 일 검색 조건",
                     content = @Content(
                             mediaType = "application/json",

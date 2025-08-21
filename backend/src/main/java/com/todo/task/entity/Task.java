@@ -62,6 +62,9 @@ public class Task {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+    @Column(nullable = false)
+    private boolean shared = false;
+
     public void taskUpdate(String title, String content, LocalDate startDate, LocalDate endDate, String status) {
         if (title != null) {
             this.title = title;
