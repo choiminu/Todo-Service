@@ -9,6 +9,10 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     /**
+     * 서버 내부 에러
+     */
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S01", "서버 내부 오류가 발생했습니다."),
+    /**
      * 인증 관련 에러
      */
     UNSUPPORTED_LOGIN_PROVIDER(HttpStatus.BAD_REQUEST, "A01", "지원하지 않는 로그인 제공자입니다."),
