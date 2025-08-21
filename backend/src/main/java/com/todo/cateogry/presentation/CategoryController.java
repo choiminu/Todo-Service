@@ -27,10 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/categories")
-public class CategoryController {
+public class CategoryController implements CategoryApiDocs{
 
     private final CategoryQueryService categoryQueryService;
     private final CategoryCommandService categoryCommandService;
+
 
     @PostMapping
     public SuccessResponse<CategoryResponse> createCategory(
@@ -55,7 +56,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public SuccessResponse<Void> updateCategory(@Login LoginUser user, @PathVariable("id") Long categoryId) {
+    public SuccessResponse<Void> deleteCategory(@Login LoginUser user, @PathVariable("id") Long categoryId) {
         categoryCommandService.deleteCategory(categoryId, user.getUserId());
         return success(OK);
     }
