@@ -19,7 +19,6 @@ public class AuthService {
 
     public LoginUser login(String provider, LoginRequest request) {
         LoginProvider loginProvider = findAuthProvider(provider);
-
         return authStrategies.stream()
                 .filter(a -> a.supports(loginProvider))
                 .findFirst()

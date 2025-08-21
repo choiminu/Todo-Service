@@ -1,5 +1,7 @@
 package com.todo.auth.presentaion;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import com.todo.common.session.LoginUser;
 import com.todo.auth.application.dto.LoginRequest;
 import com.todo.auth.application.service.AuthService;
@@ -7,7 +9,6 @@ import com.todo.common.response.SuccessResponse;
 import com.todo.common.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,13 @@ public class AuthController implements AuthApiDocs{
     ) {
         LoginUser session = authService.login(provider, loginRequest);
         sessionManager.create(request, session);
-        return SuccessResponse.success(HttpStatus.OK, session);
+        return SuccessResponse.success(OK, session);
+    }
+
+    @PostMapping("/logout")
+    public SuccessResponse<Void> logout(HttpServletRequest request) {
+        sessionManager.invalidate(request);
+        return SuccessResponse.success(OK);
     }
 
 }

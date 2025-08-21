@@ -93,4 +93,14 @@ public interface AuthApiDocs {
             ) LoginRequest loginRequest,
             HttpServletRequest request
     );
+
+    @Operation(summary = "로그아웃 API")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "로그인 아웃 성공"
+            )
+    }
+    )
+    SuccessResponse<Void> logout(HttpServletRequest request);
 }
