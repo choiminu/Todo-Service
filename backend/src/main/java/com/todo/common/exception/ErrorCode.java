@@ -16,6 +16,7 @@ public enum ErrorCode {
      * 인증 관련 에러
      */
     UNSUPPORTED_LOGIN_PROVIDER(HttpStatus.BAD_REQUEST, "A01", "지원하지 않는 로그인 제공자입니다."),
+    UNSUPPORTED_SERVICE_LOGIN(HttpStatus.INTERNAL_SERVER_ERROR, "A02", "현재 해당 서비스의 로그인은 지원하지 않습니다."),
 
     /**
      * 인가 관련 에러

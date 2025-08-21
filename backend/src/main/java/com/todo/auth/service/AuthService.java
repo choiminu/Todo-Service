@@ -1,6 +1,10 @@
 package com.todo.auth.service;
 
+import static com.todo.common.exception.ErrorCode.UNSUPPORTED_SERVICE_LOGIN;
+
 import com.todo.auth.domain.LoginProvider;
+import com.todo.auth.exception.AuthenticationException;
+import com.todo.common.exception.ErrorCode;
 import com.todo.common.session.LoginUser;
 import com.todo.auth.dto.LoginRequest;
 import com.todo.auth.strategy.AuthStrategy;
@@ -20,7 +24,7 @@ public class AuthService {
         return authStrategies.stream()
                 .filter(a -> a.supports(loginProvider))
                 .findFirst()
-                .orElseThrow()
+                .orElseThrow(() -> new AuthenticationException(UNSUPPORTED_SERVICE_LOGIN))
                 .authentication(request);
     }
 
