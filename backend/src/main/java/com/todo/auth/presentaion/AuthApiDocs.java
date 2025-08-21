@@ -1,7 +1,7 @@
 package com.todo.auth.presentaion;
 
 import com.todo.auth.domain.LoginProvider;
-import com.todo.auth.dto.LoginRequest;
+import com.todo.auth.application.dto.LoginRequest;
 import com.todo.common.response.ErrorResponse;
 import com.todo.common.response.SuccessResponse;
 import com.todo.common.session.LoginUser;

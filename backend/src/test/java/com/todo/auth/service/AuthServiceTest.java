@@ -7,11 +7,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.todo.auth.application.service.AuthService;
 import com.todo.auth.domain.LoginProvider;
 import com.todo.common.session.LoginUser;
-import com.todo.auth.dto.LoginRequest;
+import com.todo.auth.application.dto.LoginRequest;
 import com.todo.auth.exception.AuthenticationException;
-import com.todo.auth.strategy.AuthStrategy;
+import com.todo.auth.application.strategy.AuthStrategy;
 import com.todo.user.domain.User;
 import com.todo.user.domain.UserRole;
 import com.todo.user.exception.UserException;

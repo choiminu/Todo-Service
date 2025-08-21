@@ -1,10 +1,10 @@
-package com.todo.auth.strategy;
+package com.todo.auth.application.strategy;
 
 import static com.todo.common.exception.ErrorCode.LOGIN_FAIL;
 
 import com.todo.auth.domain.LoginProvider;
 import com.todo.common.session.LoginUser;
-import com.todo.auth.dto.LoginRequest;
+import com.todo.auth.application.dto.LoginRequest;
 import com.todo.user.domain.User;
 import com.todo.user.domain.UserRole;
 import com.todo.user.exception.UserException;

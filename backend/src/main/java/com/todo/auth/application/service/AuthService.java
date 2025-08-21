@@ -1,13 +1,12 @@
-package com.todo.auth.service;
+package com.todo.auth.application.service;
 
 import static com.todo.common.exception.ErrorCode.UNSUPPORTED_SERVICE_LOGIN;
 
 import com.todo.auth.domain.LoginProvider;
 import com.todo.auth.exception.AuthenticationException;
-import com.todo.common.exception.ErrorCode;
 import com.todo.common.session.LoginUser;
-import com.todo.auth.dto.LoginRequest;
-import com.todo.auth.strategy.AuthStrategy;
+import com.todo.auth.application.dto.LoginRequest;
+import com.todo.auth.application.strategy.AuthStrategy;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

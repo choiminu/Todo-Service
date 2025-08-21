@@ -10,8 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.common.session.LoginUser;
-import com.todo.auth.dto.LoginRequest;
-import com.todo.auth.service.AuthService;
+import com.todo.auth.application.dto.LoginRequest;
+import com.todo.auth.application.service.AuthService;
 import com.todo.common.session.SessionManager;
 import com.todo.user.domain.UserRole;
 import org.junit.jupiter.api.Test;

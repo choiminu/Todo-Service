@@ -1,8 +1,8 @@
 package com.todo.auth.presentaion;
 
 import com.todo.common.session.LoginUser;
-import com.todo.auth.dto.LoginRequest;
-import com.todo.auth.service.AuthService;
+import com.todo.auth.application.dto.LoginRequest;
+import com.todo.auth.application.service.AuthService;
 import com.todo.common.response.SuccessResponse;
 import com.todo.common.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
