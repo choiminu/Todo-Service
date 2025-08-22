@@ -207,10 +207,10 @@ class TaskCommandServiceTest {
 
     @ParameterizedTest
     @DisplayName("유효한 요청으로 Task 공유 시 TaskShare가 정상적으로 생성된다.")
-    @CsvSource({"1, 1, 2025-08-22"})
-    public void createShareLinkForTask_success_when_valid_request(Long userId, Long taskId, LocalDate expiredDate) {
+    @CsvSource({"1, 1, 2025-08-22, EDIT"})
+    public void createShareLinkForTask_success_when_valid_request(Long userId, Long taskId, LocalDate expiredDate, String permission) {
         //given
-        TaskShareRequest req = new TaskShareRequest(taskId, expiredDate);
+        TaskShareRequest req = new TaskShareRequest(taskId, expiredDate, permission);
 
         when(taskQueryService.findTaskByIdForUserOrThrow(any(), any())).thenReturn(task);
 
