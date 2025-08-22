@@ -1,10 +1,8 @@
 package com.todo.task.entity;
 
-import static com.todo.common.exception.ErrorCode.TASK_ACCESS_FORBIDDEN;
-
 import com.todo.cateogry.domain.Category;
 import com.todo.task.entity.vo.TaskPeriod;
-import com.todo.task.exception.TaskException;
+import com.todo.task.entity.vo.TaskShare;
 import com.todo.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -62,8 +60,8 @@ public class Task {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(nullable = false)
-    private boolean shared = false;
+    @Embedded
+    private TaskShare taskShare;
 
     public void taskUpdate(String title, String content, LocalDate startDate, LocalDate endDate, String status) {
         if (title != null) {
@@ -82,4 +80,15 @@ public class Task {
             this.status = TaskStatus.from(status);
         }
     }
+
+    public TaskShare getShare(String link, LocalDate localDate) {
+        return this.taskShare = new TaskShare(link, localDate);
+    }
+
+    public void isValidLink(String link) {
+        this.taskShare.validateLink(link);
+    }
+
+
+
 }

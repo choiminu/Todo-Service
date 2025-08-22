@@ -10,9 +10,12 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import com.todo.cateogry.domain.Category;
 import com.todo.cateogry.exception.CategoryException;
 import com.todo.cateogry.application.service.CategoryQueryService;
+import com.todo.common.utils.EncryptService;
 import com.todo.task.application.dto.request.TaskCreateRequest;
+import com.todo.task.application.dto.request.TaskShareRequest;
 import com.todo.task.application.dto.response.TaskResponse;
 import com.todo.task.application.dto.request.TaskUpdateRequest;
 import com.todo.task.application.service.TaskCommandService;
@@ -21,16 +24,20 @@ import com.todo.task.entity.Task;
 import com.todo.task.entity.TaskStatus;
 import com.todo.task.entity.repository.TaskRepository;
 import com.todo.task.entity.vo.TaskPeriod;
+import com.todo.task.entity.vo.TaskShare;
 import com.todo.task.exception.TaskException;
 import com.todo.task.application.mapper.TaskMapper;
 import com.todo.user.application.service.UserQueryService;
 import com.todo.user.exception.UserException;
 import java.time.LocalDate;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -46,6 +53,9 @@ class TaskCommandServiceTest {
 
     @Mock
     UserQueryService userQueryService;
+
+    @Mock
+    EncryptService encryptService;
 
     @Mock
     TaskMapper taskMapper;
@@ -91,6 +101,7 @@ class TaskCommandServiceTest {
         TaskResponse res = new TaskResponse(task.getId(), STUB_CATEGORY_ID, title, content, TaskStatus.PROGRESS,
                 startDate, endDate);
 
+        when(categoryQueryService.findCategoryByCategoryIdAndUserId(any(), any())).thenReturn(new Category());
         when(taskMapper.toEntity(any(), any(), any())).thenReturn(task);
         when(taskMapper.toResponse(task)).thenReturn(res);
 
@@ -126,13 +137,13 @@ class TaskCommandServiceTest {
         //given
         TaskCreateRequest req = new TaskCreateRequest(STUB_CATEGORY_ID, title, content, status, startDate, endDate);
 
-        when(userQueryService.findUserById(any())).thenThrow(
-                new UserException(USER_NOT_FOUND));
+        when(categoryQueryService.findCategoryByCategoryIdAndUserId(any(), any()))
+                .thenThrow(new CategoryException(CATEGORY_NOT_FOUND));
 
         //when & then
         Assertions.assertThatThrownBy(() -> taskCommandService.createTask(STUB_USER_ID, req))
-                .isInstanceOf(UserException.class)
-                .hasMessage(USER_NOT_FOUND.getMessage());
+                .isInstanceOf(CategoryException.class)
+                .hasMessage(CATEGORY_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -195,6 +206,23 @@ class TaskCommandServiceTest {
         assertThatThrownBy(() -> taskCommandService.deleteTask(task.getId(), STUB_USER_ID))
                 .isInstanceOf(TaskException.class)
                 .hasMessage(TASK_NOT_FOUND.getMessage());
+    }
+
+    @ParameterizedTest
+    @DisplayName("유효한 요청으로 Task 공유 시 TaskShare가 정상적으로 생성된다.")
+    @CsvSource({"1, 1, 2025-08-22"})
+    public void shareTask_success_when_valid_request(Long userId, Long taskId, LocalDate expiredDate) {
+        //given
+        TaskShareRequest req = new TaskShareRequest(taskId, expiredDate);
+
+        when(taskQueryService.findTaskByTaskIdAndUserId(any(), any())).thenReturn(task);
+
+        //when
+        TaskShare taskShare = taskCommandService.shareTask(userId, req);
+
+        //then
+        assertThat(taskShare).isNotNull();
+        assertThat(taskShare.getExpirationDate()).isEqualTo(expiredDate);
     }
 
 }
