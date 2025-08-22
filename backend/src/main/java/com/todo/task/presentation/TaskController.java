@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Auth
 @RestController
-@RequestMapping("/api/task")
+@RequestMapping("/api/tasks")
 @RequiredArgsConstructor
 public class TaskController implements TaskApiDocs{
 
@@ -50,7 +50,7 @@ public class TaskController implements TaskApiDocs{
             @PathVariable("id") Long taskId,
             @Login LoginUser loginUser
     ) {
-        return success(OK, taskQueryService.getTaskByTaskIdAndUserId(taskId, loginUser.getUserId()));
+        return success(OK, taskQueryService.getTaskByIdForUser(taskId, loginUser.getUserId()));
     }
 
     @GetMapping
@@ -58,7 +58,7 @@ public class TaskController implements TaskApiDocs{
             @Login LoginUser loginUser,
             @ModelAttribute TaskSearchRequest request
     ) {
-        return success(OK, taskQueryService.searchUserTasks(loginUser.getUserId(), request));
+        return success(OK, taskQueryService.searchTasksForUser(loginUser.getUserId(), request));
     }
 
     @PatchMapping("/{id}")

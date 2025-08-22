@@ -37,6 +37,15 @@ public enum ErrorCode {
     TASK_ACCESS_FORBIDDEN(HttpStatus.BAD_REQUEST, "T02", "해당 Task의 접근 권한이 없습니다."),
     TASK_PERIOD_INVALID(HttpStatus.BAD_REQUEST, "T03", "유효하지 않은 기간입니다."),
 
+    /**
+     * TaskShare 관련 에러
+     */
+    DISABLED_LINK(HttpStatus.BAD_REQUEST, "Z01", "공유가 비활성화된 링크입니다."),
+    INVALID_LINK(HttpStatus.BAD_REQUEST, "Z02", "링크가 잘못되었습니다."),
+    TOKEN_MISMATCH(HttpStatus.BAD_REQUEST, "Z03", "링크 토큰이 일치하지 않습니다."),
+    INVALID_EXPIRATION_DATE(HttpStatus.BAD_REQUEST, "Z04", "유효기간 설정 잘못하였습니다."),
+    EXPIRED_LINK (HttpStatus.BAD_REQUEST, "Z05", "유효기간이 지난 링크입니다."),
+    EDIT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "Z06", "수정 권한이 없습니다."),
 
 
     /**
@@ -45,9 +54,7 @@ public enum ErrorCode {
     EMAIL_NOT_UNIQUE(HttpStatus.BAD_REQUEST, "U01", "이미 사용중인 이메일입니다."),
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "U02", "비밀번호가 일치하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "U03", "해당 사용자를 찾을 수 없습니다."),
-    LOGIN_FAIL(HttpStatus.BAD_REQUEST, "U04", "이메일 또는 아이디가 일치하지 않습니다.")
-
-    ;
+    LOGIN_FAIL(HttpStatus.BAD_REQUEST, "U04", "이메일 또는 아이디가 일치하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorCode;
