@@ -45,6 +45,7 @@ public enum ErrorCode {
     TOKEN_MISMATCH(HttpStatus.BAD_REQUEST, "Z03", "링크 토큰이 일치하지 않습니다."),
     INVALID_EXPIRATION_DATE(HttpStatus.BAD_REQUEST, "Z04", "유효기간 설정 잘못하였습니다."),
     EXPIRED_LINK (HttpStatus.BAD_REQUEST, "Z05", "유효기간이 지난 링크입니다."),
+    EDIT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "Z06", "수정 권한이 없습니다."),
 
 
     /**

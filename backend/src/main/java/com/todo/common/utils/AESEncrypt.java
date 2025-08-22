@@ -1,5 +1,9 @@
 package com.todo.common.utils;
 
+import static com.todo.common.exception.ErrorCode.INVALID_LINK;
+
+import com.todo.common.exception.ErrorCode;
+import com.todo.task.exception.TaskException;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -18,7 +22,7 @@ public class AESEncrypt implements EncryptService {
             byte[] encrypted = cipher.doFinal(input.getBytes());
             return Base64.getUrlEncoder().withoutPadding().encodeToString(encrypted);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new TaskException(INVALID_LINK);
         }
     }
 
@@ -30,7 +34,7 @@ public class AESEncrypt implements EncryptService {
             byte[] decoded = Base64.getUrlDecoder().decode(encrypted);
             return new String(cipher.doFinal(decoded));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new TaskException(INVALID_LINK);
         }
 
     }

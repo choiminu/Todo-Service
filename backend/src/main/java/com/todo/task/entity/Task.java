@@ -64,6 +64,7 @@ public class Task {
     private TaskShare taskShare;
 
     public void taskUpdate(String title, String content, LocalDate startDate, LocalDate endDate, String status) {
+
         if (title != null) {
             this.title = title;
         }
@@ -79,16 +80,19 @@ public class Task {
         if (status != null) {
             this.status = TaskStatus.from(status);
         }
+
     }
 
-    public TaskShare getShare(String link, LocalDate localDate) {
-        return this.taskShare = new TaskShare(link, localDate);
+    public TaskShare enableSharing(String link, LocalDate localDate, String permission) {
+        return this.taskShare = new TaskShare(link, localDate, permission);
     }
 
-    public void isValidLink(String link) {
+    public void ensureValidShareToken(String link) {
         this.taskShare.validateLink(link);
     }
 
-
+    public void ensureEditPermission() {
+        this.taskShare.ensureEditPermission();
+    }
 
 }

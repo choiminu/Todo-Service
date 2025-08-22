@@ -5,6 +5,7 @@ import com.todo.common.response.SuccessResponse;
 import com.todo.common.session.LoginUser;
 import com.todo.common.session.resolver.Login;
 import com.todo.task.application.dto.request.TaskShareRequest;
+import com.todo.task.application.dto.request.TaskUpdateRequest;
 import com.todo.task.application.dto.response.TaskResponse;
 import com.todo.task.entity.vo.TaskShare;
 import io.swagger.v3.oas.annotations.Operation;
@@ -82,7 +83,7 @@ public interface TaskShareApiDocs {
                     )
             )
     })
-    SuccessResponse<TaskShare> createShareLink(
+    SuccessResponse<TaskShare> createTaskShareLink(
             @Login LoginUser loginUser,
             @RequestBody(
                     description = "Task 공유 설정",
@@ -92,7 +93,8 @@ public interface TaskShareApiDocs {
                             examples = @ExampleObject(
                                     value = "{\n"
                                             + "  \"taskId\": 1,\n"
-                                            + "  \"expirationDate\": \"2025-08-31\"\n"
+                                            + "  \"expirationDate\": \"2025-08-31\",\n"
+                                            + "   \"permission\": \"edit\"\n"
                                             + "}"
                             )
                     )
@@ -169,10 +171,104 @@ public interface TaskShareApiDocs {
                     )
             )
     })
-    SuccessResponse<TaskResponse> getSharedTask(
+    SuccessResponse<TaskResponse> getTaskByShareToken(
             @Parameter(
                     description = "공유 토큰",
                     examples = @ExampleObject(value = "5Dorotxdu46F1P5MK113_A")
             ) String token
+    );
+    @Operation(
+            summary = "공유 토큰으로 Task 수정 API",
+            description = "공유 링크의 권한이 EDIT일 때만 Task 내용을 수정할 수 있습니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "수정 성공"),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된/만료/비활성화된 링크 또는 형식 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(name = "토큰 불일치",
+                                            value = "{\n" +
+                                                    "  \"status\": 400,\n" +
+                                                    "  \"code\": \"Z03\",\n" +
+                                                    "  \"message\": \"링크 토큰이 일치하지 않습니다.\"\n" +
+                                                    "}"),
+                                    @ExampleObject(name = "만료된 링크",
+                                            value = "{\n" +
+                                                    "  \"status\": 400,\n" +
+                                                    "  \"code\": \"Z05\",\n" +
+                                                    "  \"message\": \"유효기간이 지난 링크입니다.\"\n" +
+                                                    "}"),
+                                    @ExampleObject(name = "비활성화된 링크",
+                                            value = "{\n" +
+                                                    "  \"status\": 400,\n" +
+                                                    "  \"code\": \"Z01\",\n" +
+                                                    "  \"message\": \"공유가 비활성화된 링크입니다.\"\n" +
+                                                    "}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "수정 권한 없음",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\n" +
+                                            "  \"status\": 403,\n" +
+                                            "  \"code\": \"T09\",\n" +
+                                            "  \"message\": \"수정 권한이 없습니다.\"\n" +
+                                            "}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Task 없음",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\n" +
+                                            "  \"status\": 404,\n" +
+                                            "  \"code\": \"T01\",\n" +
+                                            "  \"message\": \"해당 Task를 찾을 수 없습니다.\"\n" +
+                                            "}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\n" +
+                                            "  \"status\": 500,\n" +
+                                            "  \"code\": \"S01\",\n" +
+                                            "  \"message\": \"서버 내부 오류가 발생했습니다.\"\n" +
+                                            "}")
+                    )
+            )
+    })
+    SuccessResponse<TaskResponse> updateTaskByShareToken(
+            @Parameter(description = "공유 토큰", examples = @ExampleObject(value = "5Dorotxdu46F1P5MK113_A"))
+            String token,
+            @RequestBody(
+                    description = "수정할 Task 정보",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TaskUpdateRequest.class),
+                            examples = @ExampleObject(
+                                    value = "{\n" +
+                                            "  \"title\": \"운동하기(수정)\",\n" +
+                                            "  \"content\": \"러닝 → 헬스\",\n" +
+                                            "  \"status\": \"PROGRESS\"\n" +
+                                            "}")
+                    )
+            ) TaskUpdateRequest request
     );
 }

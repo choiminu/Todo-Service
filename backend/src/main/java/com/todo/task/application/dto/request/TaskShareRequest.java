@@ -9,4 +9,6 @@ import lombok.Data;
 public class TaskShareRequest {
     private Long taskId;
     private LocalDate expirationDate;
+    private String permission;
+
 }

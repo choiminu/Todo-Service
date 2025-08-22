@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,12 +74,12 @@ class TaskQueryServiceTest {
 
     @Test
     @DisplayName("사용자는 TaskId로 Task를 조회할 수 있다.")
-    void findTaskByTaskIdAndUserId_success() {
+    void findTaskById_ForUserOrThrow_success() {
         //given
         when(taskRepository.findTaskByTaskIdAndUserId(any(), any())).thenReturn(Optional.of(task));
 
         //when
-        Task findTask = taskQueryService.findTaskByTaskIdAndUserId(1L, 1L);
+        Task findTask = taskQueryService.findTaskByIdForUserOrThrow(1L, 1L);
 
         //then
         assertThat(task.getId()).isEqualTo(findTask.getId());
@@ -90,12 +89,12 @@ class TaskQueryServiceTest {
 
     @Test
     @DisplayName("Task를 조회할때 Task가 존재하지 않는다면 예외가 발생한다.")
-    void findTaskByTaskIdAndUserId_fail_when_taskNotFound() {
+    void findTaskByTaskIdAndUserId_fail_when_taskNotFoundForUserOrThrow() {
         //given
         when(taskRepository.findTaskByTaskIdAndUserId(any(), any())).thenReturn(Optional.empty());
 
         //when & then
-        assertThatThrownBy(() -> taskQueryService.findTaskByTaskIdAndUserId(1L, 1L))
+        assertThatThrownBy(() -> taskQueryService.findTaskByIdForUserOrThrow(1L, 1L))
                 .isInstanceOf(TaskException.class)
                 .hasMessage(TASK_NOT_FOUND.getMessage());
     }
@@ -107,8 +106,8 @@ class TaskQueryServiceTest {
             "5, Todo Service 구현하기, Todo Service를 만들어보자., 2025-08-20, 2025-08-24, DONE",
     })
     @DisplayName("사용자는 카테고리 Id, 상태, 시작일, 종료일을 조합하여 Task를 검색할 수 있다.")
-    void searchUserTasks_success(int size, String title, String content, LocalDate startDate, LocalDate endDate,
-                                 String status) {
+    void searchTasks_ForUser_success(int size, String title, String content, LocalDate startDate, LocalDate endDate,
+                                     String status) {
         //given
 
         TaskSearchRequest req = new TaskSearchRequest(null, status, startDate, endDate);
@@ -126,7 +125,7 @@ class TaskQueryServiceTest {
         when(taskRepository.search(any(), any(), any(), any(), any())).thenReturn(taskList);
 
         //when
-        List<TaskResponse> responses = taskQueryService.searchUserTasks(1L, req);
+        List<TaskResponse> responses = taskQueryService.searchTasksForUser(1L, req);
 
         //then
         assertThat(responses.size()).isEqualTo(size);
@@ -134,7 +133,7 @@ class TaskQueryServiceTest {
 
     @Test
     @DisplayName("유효한 토큰으로 Task 공유 조회 시 TaskResponse를 반환한다.")
-    void getShareTask_success_when_valid_token() {
+    void enableSharingTask_success_when_valid_token() {
         // given
         String token = "5Dorotxdu46F1P5MK113_A";
         TaskResponse res = new TaskResponse(task.getId(), STUB_CATEGORY_ID, title, content, TaskStatus.PROGRESS,
@@ -145,7 +144,7 @@ class TaskQueryServiceTest {
         when(taskMapper.toResponse(task)).thenReturn(res);
 
         // when
-        TaskResponse shareTask = taskQueryService.getShareTask(token);
+        TaskResponse shareTask = taskQueryService.getTaskByShareToken(token);
 
         // then
         assertThat(shareTask).isNotNull();

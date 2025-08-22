@@ -2,7 +2,6 @@ package com.todo.task.service;
 
 import static com.todo.common.exception.ErrorCode.CATEGORY_NOT_FOUND;
 import static com.todo.common.exception.ErrorCode.TASK_NOT_FOUND;
-import static com.todo.common.exception.ErrorCode.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,9 +27,7 @@ import com.todo.task.entity.vo.TaskShare;
 import com.todo.task.exception.TaskException;
 import com.todo.task.application.mapper.TaskMapper;
 import com.todo.user.application.service.UserQueryService;
-import com.todo.user.exception.UserException;
 import java.time.LocalDate;
-import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -153,7 +150,7 @@ class TaskCommandServiceTest {
         TaskUpdateRequest req = new TaskUpdateRequest(title, content, status, startDate, endDate);
         TaskResponse res = new TaskResponse(task.getId(), STUB_CATEGORY_ID, "change", "change", TaskStatus.DONE, startDate, endDate);
 
-        when(taskQueryService.findTaskByTaskIdAndUserId(any(), any())).thenReturn(task);
+        when(taskQueryService.findTaskByIdForUserOrThrow(any(), any())).thenReturn(task);
         when(taskMapper.toResponse(any())).thenReturn(res);
 
         //when
@@ -171,7 +168,7 @@ class TaskCommandServiceTest {
         //given
         TaskUpdateRequest req = new TaskUpdateRequest(title, content, status, startDate, endDate);
 
-        when(taskQueryService.findTaskByTaskIdAndUserId(any(), any())).thenThrow(new TaskException(TASK_NOT_FOUND));
+        when(taskQueryService.findTaskByIdForUserOrThrow(any(), any())).thenThrow(new TaskException(TASK_NOT_FOUND));
 
         //when & then
         assertThatThrownBy(() -> taskCommandService.updateTask(task.getId(), STUB_USER_ID, req))
@@ -211,14 +208,14 @@ class TaskCommandServiceTest {
     @ParameterizedTest
     @DisplayName("유효한 요청으로 Task 공유 시 TaskShare가 정상적으로 생성된다.")
     @CsvSource({"1, 1, 2025-08-22"})
-    public void shareTask_success_when_valid_request(Long userId, Long taskId, LocalDate expiredDate) {
+    public void createShareLinkForTask_success_when_valid_request(Long userId, Long taskId, LocalDate expiredDate) {
         //given
         TaskShareRequest req = new TaskShareRequest(taskId, expiredDate);
 
-        when(taskQueryService.findTaskByTaskIdAndUserId(any(), any())).thenReturn(task);
+        when(taskQueryService.findTaskByIdForUserOrThrow(any(), any())).thenReturn(task);
 
         //when
-        TaskShare taskShare = taskCommandService.shareTask(userId, req);
+        TaskShare taskShare = taskCommandService.createShareLinkForTask(userId, req);
 
         //then
         assertThat(taskShare).isNotNull();

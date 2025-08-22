@@ -25,7 +25,7 @@ public class TaskQueryService {
     private final TaskMapper taskMapper;
     private final EncryptService encryptService;
 
-    public List<TaskResponse> searchUserTasks(Long userId, TaskSearchRequest req) {
+    public List<TaskResponse> searchTasksForUser(Long userId, TaskSearchRequest req) {
         List<Task> tasks = taskRepository.search(
                 userId,
                 req.getCategoryId(),
@@ -39,24 +39,24 @@ public class TaskQueryService {
                 .toList();
     }
 
-    public TaskResponse getShareTask(String token) {
+    public TaskResponse getTaskByShareToken(String token) {
         String decryptedToken = encryptService.decrypt(token);
         String[] tokenParts = decryptedToken.split(TaskShare.DELIMITER);
 
         Long userId = Long.valueOf(tokenParts[TaskShare.USER_ID_INDEX]);
         Long taskId = Long.valueOf(tokenParts[TaskShare.TASK_ID_INDEX]);
 
-        Task findTask = findTaskByTaskIdAndUserId(taskId, userId);
-        findTask.isValidLink(token);
+        Task findTask = findTaskByIdForUserOrThrow(taskId, userId);
+        findTask.ensureValidShareToken(token);
 
         return taskMapper.toResponse(findTask);
     }
 
-    public TaskResponse getTaskByTaskIdAndUserId(Long taskId, Long userId) {
-        return taskMapper.toResponse(findTaskByTaskIdAndUserId(taskId, userId));
+    public TaskResponse getTaskByIdForUser(Long taskId, Long userId) {
+        return taskMapper.toResponse(findTaskByIdForUserOrThrow(taskId, userId));
     }
 
-    public Task findTaskByTaskIdAndUserId(Long taskId, Long userId) {
+    public Task findTaskByIdForUserOrThrow(Long taskId, Long userId) {
         return taskRepository
                 .findTaskByTaskIdAndUserId(taskId, userId)
                 .orElseThrow(() -> new TaskException(TASK_NOT_FOUND));

@@ -36,7 +36,7 @@ public class TaskCommandService {
     }
 
     public TaskResponse updateTask(Long taskId, Long userId, TaskUpdateRequest req) {
-        Task findTask = taskQueryService.findTaskByTaskIdAndUserId(taskId, userId);
+        Task findTask = taskQueryService.findTaskByIdForUserOrThrow(taskId, userId);
 
         findTask.taskUpdate(req.getTitle(), req.getContent(), req.getStartDate(), req.getEndDate(), req.getStatus());
 
@@ -44,17 +44,32 @@ public class TaskCommandService {
     }
 
     public void deleteTask(Long taskId, Long userId) {
-        Task findTask = taskQueryService.findTaskByTaskIdAndUserId(taskId, userId);
+        Task findTask = taskQueryService.findTaskByIdForUserOrThrow(taskId, userId);
         taskRepository.delete(findTask);
     }
 
-    public TaskShare shareTask(Long userId, TaskShareRequest request) {
-        Task findTask = taskQueryService.findTaskByTaskIdAndUserId(request.getTaskId(), userId);
+    public TaskShare createShareLinkForTask(Long userId, TaskShareRequest request) {
+        Task findTask = taskQueryService.findTaskByIdForUserOrThrow(request.getTaskId(), userId);
 
         String rawLinkToken = userId + TaskShare.DELIMITER + request.getTaskId();
         String encryptedLink = encryptService.encrypt(rawLinkToken);
 
-        return findTask.getShare(encryptedLink, request.getExpirationDate());
+        return findTask.enableSharing(encryptedLink, request.getExpirationDate(), request.getPermission());
+    }
+
+    public TaskResponse updateTaskByShareToken(String token, TaskUpdateRequest req) {
+        String decryptedToken = encryptService.decrypt(token);
+        String[] tokenParts = decryptedToken.split(TaskShare.DELIMITER);
+
+        Long userId = Long.valueOf(tokenParts[TaskShare.USER_ID_INDEX]);
+        Long taskId = Long.valueOf(tokenParts[TaskShare.TASK_ID_INDEX]);
+
+        Task findTask = taskQueryService.findTaskByIdForUserOrThrow(taskId, userId);
+        findTask.ensureValidShareToken(token);
+        findTask.ensureEditPermission();
+
+        findTask.taskUpdate(req.getTitle(), req.getContent(), req.getStartDate(), req.getEndDate(), req.getStatus());
+        return taskMapper.toResponse(findTask);
     }
 
 }
