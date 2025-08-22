@@ -51,7 +51,7 @@ public class TaskCommandService {
     public TaskShare shareTask(Long userId, TaskShareRequest request) {
         Task findTask = taskQueryService.findTaskByTaskIdAndUserId(request.getTaskId(), userId);
 
-        String rawLinkToken = userId + ":" + request.getTaskId();
+        String rawLinkToken = userId + TaskShare.DELIMITER + request.getTaskId();
         String encryptedLink = encryptService.encrypt(rawLinkToken);
 
         return findTask.getShare(encryptedLink, request.getExpirationDate());
