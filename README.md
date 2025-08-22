@@ -4,6 +4,41 @@ Todo-Service는 로그인한 사용자가 자신의 카테고리 안에서 할 �
 
 <br>
 
+### 소스 빌드 및 실행 방법
+
+**방법 1. Docker 환경에서 실행**
+``` bash
+
+# 1. 소스 클론
+git clone https://github.com/choiminu/Todo-Service.git
+
+# 2. 프로젝트 폴더 이동
+cd Todo-Service
+
+# 3. Docker Compose 실행 (백엔드 + DB 컨테이너 기동)
+docker compose -f backend/docker-compose.yml up -d
+```
+**방법 2. Docker 없이 로컬 실행**
+``` bash
+# 1. 소스 클론
+git clone https://github.com/choiminu/Todo-Service.git
+
+# 2. 프로젝트 폴더 이동
+cd Todo-Service/backend
+
+# 3. .env 또는 application.yml(DB 접속 정보) 수정
+# 예시
+SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/todo_db
+SPRING_DATASOURCE_USERNAME=todo_user
+SPRING_DATASOURCE_PASSWORD=todo_pass
+
+# 4. 백엔드 서버 실행
+./gradlew bootRun
+
+```
+
+<br>
+
 ### 사용한 기술
 - Java 17
 - Spring Boot 3.5.4
@@ -29,6 +64,60 @@ Todo-Service는 로그인한 사용자가 자신의 카테고리 안에서 할 �
 
 
 <br>
+
+### DB 스키마 & ERD
+
+``` sql
+create table user
+(
+    id       bigint auto_increment primary key,
+    email    varchar(255) not null,
+    password varchar(255) not null,
+    constraint uq_user_email unique (email) 
+);
+```
+
+``` sql
+create table category
+(
+    id      bigint auto_increment primary key,
+    user_id bigint       not null,
+    name    varchar(255) not null,
+    constraint fk_category_user_id foreign key (user_id) 
+        references user (id)
+        on delete cascade
+);
+```
+
+``` sql
+create table task
+(
+    id              bigint auto_increment primary key,
+    user_id         bigint                            not null,
+    category_id     bigint                            not null,
+    title           varchar(255)                      not null,
+    content         varchar(2550)                     null,
+    status          enum ('DONE', 'NONE', 'PROGRESS') not null,
+    permission      enum ('EDIT', 'VIEW')             null,
+    shared          bit                               null,
+    shared_link     varchar(255)                      null,
+    start_date      date                              not null,
+    end_date        date                              not null,
+    expiration_date date                              null,
+
+    constraint fk_task_user_id 
+        foreign key (user_id) references user (id)
+        on delete cascade,
+
+    constraint fk_task_category_id 
+        foreign key (category_id) references category (id)
+        on delete cascade
+);
+
+```
+
+<img width="658" height="498" alt="image" src="https://github.com/user-attachments/assets/9263777b-415b-47ae-b866-8e29f0b196b7" />
+
 
 ### 핵심기능
 
