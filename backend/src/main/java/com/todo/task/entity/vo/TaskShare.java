@@ -1,4 +1,4 @@
-package com.todo.task.entity;
+package com.todo.task.entity.vo;
 
 
 import static com.todo.common.exception.ErrorCode.DISABLED_LINK;

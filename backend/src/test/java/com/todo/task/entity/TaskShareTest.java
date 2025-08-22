@@ -5,6 +5,7 @@ import static com.todo.common.exception.ErrorCode.INVALID_EXPIRATION_DATE;
 import static com.todo.common.exception.ErrorCode.TOKEN_MISMATCH;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.todo.task.entity.vo.TaskShare;
 import com.todo.task.exception.TaskException;
 import java.time.LocalDate;
 import org.assertj.core.api.Assertions;
