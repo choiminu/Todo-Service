@@ -4,6 +4,14 @@ Todo-Service는 로그인한 사용자가 자신의 카테고리 안에서 할 �
 
 <br>
 
+| 메인페이지 | 할일 등록 |
+| ---------- | --------- |
+| <p align="center"><img width="500" height="800" src="https://github.com/user-attachments/assets/9e7af774-0988-42e4-a47a-80140222dbfd" /></p> | <p align="center"><img width="500" height="800" src="https://github.com/user-attachments/assets/f04efb07-d5fd-4b61-b419-defeb4bfc3eb" /></p> |
+| <p align="center"><img width="500" height="800" src="https://github.com/user-attachments/assets/f98f057f-1693-423f-813f-2257c48042d2" /></p> | <p align="center"><img width="500" height="800" src="https://github.com/user-attachments/assets/6334f764-6d3b-42bf-9cc2-fb3fd592b4552" /></p> |
+| <p align="center">회원가입</p> | <p align="center">로그인</p> |
+
+<br>
+
 ### 소스 빌드 및 실행 방법
 
 **방법 1. Docker 환경에서 실행**
@@ -18,6 +26,9 @@ cd Todo-Service
 # 3. Docker Compose 실행 (백엔드 + DB 컨테이너 기동)
 docker compose -f backend/docker-compose.yml up -d
 ```
+
+<br>
+
 **방법 2. Docker 없이 로컬 실행**
 ``` bash
 # 1. 소스 클론
@@ -119,13 +130,31 @@ create table task
 <img width="658" height="498" alt="image" src="https://github.com/user-attachments/assets/9263777b-415b-47ae-b866-8e29f0b196b7" />
 
 
-### 핵심기능
+<br>
 
-| 메인페이지 | 할일 등록 |
-| ---------- | --------- |
-| <p align="center"><img width="500" height="800" src="https://github.com/user-attachments/assets/9e7af774-0988-42e4-a47a-80140222dbfd" /></p> | <p align="center"><img width="500" height="800" src="https://github.com/user-attachments/assets/f04efb07-d5fd-4b61-b419-defeb4bfc3eb" /></p> |
-| <p align="center"><img width="500" height="800" src="https://github.com/user-attachments/assets/f98f057f-1693-423f-813f-2257c48042d2" /></p> | <p align="center"><img width="500" height="800" src="https://github.com/user-attachments/assets/6334f764-6d3b-42bf-9cc2-fb3fd592b4552" /></p> |
-| <p align="center">회원가입</p> | <p align="center">로그인</p> |
+### API 명세서
+- 자세한 명세는 Swagger UI에서 확인 가능합니다.
+
+| 영역         | 메서드    | 경로                           | 설명                                      |
+| ---------- | ------ | ---------------------------- | --------------------------------------- |
+| Auth       | POST   | `/api/auth/logout`           | 로그아웃                                    |
+| Auth       | POST   | `/api/auth/login/{provider}` | 로그인 (`{provider}`: 예. google, github 등) |
+| User       | POST   | `/api/users`                 | 회원가입                                    |
+| Task Share | POST   | `/api/share/tasks`           | Task 공유 링크 생성                           |
+| Task Share | GET    | `/api/share/tasks/{token}`   | 공유 토큰으로 Task 조회                         |
+| Task Share | PATCH  | `/api/share/tasks/{token}`   | 공유 토큰으로 Task 수정                         |
+| Category   | GET    | `/api/categories`            | 카테고리 목록 조회                              |
+| Category   | POST   | `/api/categories`            | 카테고리 생성                                 |
+| Category   | DELETE | `/api/categories/{id}`       | 카테고리 삭제                                 |
+| Category   | PATCH  | `/api/categories/{id}`       | 카테고리 수정                                 |
+| Task       | GET    | `/api/tasks`                 | 할 일 검색                                  |
+| Task       | POST   | `/api/tasks`                 | 할 일 생성                                  |
+| Task       | GET    | `/api/tasks/{id}`            | 할 일 단건 조회                               |
+| Task       | DELETE | `/api/tasks/{id}`            | 할 일 삭제                                  |
+| Task       | PATCH  | `/api/tasks/{id}`            | 할 일 수정                                  |
+
+
+<br>
 
 
 
