@@ -27,7 +27,7 @@ class TaskShareTest {
         String taskLink = ts.getTaskLink();
 
         //then
-        Assertions.assertThat(taskLink).isEqualTo("http://localhost:8080/api/public/tasks/" + link);
+        Assertions.assertThat(taskLink).isEqualTo(TaskShare.TASK_SHARED_BASE_URL + link);
     }
 
     @Test

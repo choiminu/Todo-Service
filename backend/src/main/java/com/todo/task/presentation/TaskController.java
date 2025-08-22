@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Auth
 @RestController
-@RequestMapping("/api/task")
+@RequestMapping("/api/tasks")
 @RequiredArgsConstructor
 public class TaskController implements TaskApiDocs{
 

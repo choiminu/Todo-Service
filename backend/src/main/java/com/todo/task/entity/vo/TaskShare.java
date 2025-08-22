@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TaskShare {
 
-    public static final String TASK_SHARED_BASE_URL = "http://localhost:8080/api/public/tasks/";
+    public static final String TASK_SHARED_BASE_URL = "http://localhost:8080/api/share/tasks/";
     public static final String DELIMITER = ":";
     public static final int USER_ID_INDEX = 0;
     public static final int TASK_ID_INDEX = 1;

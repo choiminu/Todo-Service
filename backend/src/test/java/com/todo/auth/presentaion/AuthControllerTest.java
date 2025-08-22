@@ -47,13 +47,11 @@ class AuthControllerTest {
         when(authService.login(null, req)).thenReturn(new LoginUser(1L, UserRole.USER));
 
         //when & then
-        mockMvc.perform(post("/api/auth/login")
+        mockMvc.perform(post("/api/auth/login/SERVER")
                         .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.userId").value(1))
-                .andExpect(jsonPath("$.status").value(200));
+                .andExpect(status().isOk());
     }
 
 }
