@@ -9,6 +9,6 @@ public enum TaskStatus {
                 return value;
             }
         }
-        return TaskStatus.NONE;
+        return null;
     }
 }
